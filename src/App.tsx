@@ -1,11 +1,14 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Screens } from "./screens/routes/Screens";
+import './css/index.css';
 
-
-function App() {
-
+const queryClient = new QueryClient();
+console.log('queryClient : ', queryClient);
+function App() { 
   return (
-    <>
-      <h1>HelloWorld</h1>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <Screens/>
+    </QueryClientProvider>
   )
 }
 
