@@ -5,17 +5,15 @@ export function Profile() {
   const [userFirstname, setUserFirstname] = useState("");
   const [userLastname, setUserLastname] = useState("");
   const [userRole, setUserRole] = useState("");
-  const [userCreatedAt, setUserCreatedAt] = useState("");
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
       const userName = JSON.parse(user);
-      const { firstname, lastname, role, createdAt, token } = userName;
+      const { firstname, lastname, role } = userName;
       setUserFirstname(`${firstname}`);
       setUserLastname(`${lastname} `);
       setUserRole(`${role}`);
-      setUserCreatedAt(`${token}`);
     }
   }, []);
 

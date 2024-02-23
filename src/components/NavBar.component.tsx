@@ -50,7 +50,7 @@ export default function NavBar() {
   const handleCloseCart = () => {
     setIsOpen(false);
   };
-  console.log('isAuthenticated from navbar : ', isAuthenticated);
+  
   return (
     <StyledBoxForNavBar sx={{ ...(visible ? { top: 0 } : { top: "-80px" }) }}>
       <AppBar position="static">

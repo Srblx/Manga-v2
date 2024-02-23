@@ -17,8 +17,6 @@ type SingleMangaItemProps = {
 ));
 
 const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
-    console.log(manga);
-
     return (
         <>
             <StyledStackForTitle>

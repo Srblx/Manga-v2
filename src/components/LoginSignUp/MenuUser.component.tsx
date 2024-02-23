@@ -29,7 +29,7 @@ export default function PositionedMenu({ isAuthenticated }: { isAuthenticated: b
     handleClose();
     window.location.reload();
   };
-  console.log('isAuthenticated : ', isAuthenticated);
+  
   return (
     <div>
       <Button

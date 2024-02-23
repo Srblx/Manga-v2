@@ -3,15 +3,14 @@ import { Link } from "react-router-dom";
 
 
 //TODO STYLED FOR NAV BAR
-export const StyledBoxForNavBar = styled(Box)(/*( { visible }: { visible: boolean }) => ( */{
+export const StyledBoxForNavBar = styled(Box)({
     flexGrow: 1,
     position: "fixed",
     width: "100%",
     height: "80px",
     zIndex: "9999",
     transition: "top 0.3s",
-    // top: visible ? 0 : "-80px",
-})/* ) */;
+});
 
 export const StyledTypographyForNavBar = styled(Typography)({
     flexGrow: 1, 

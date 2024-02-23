@@ -114,7 +114,6 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
         {populatedMangas?.map((item) => {
           total = item.quantity * price;
           totalCart = item.quantity * price * populatedMangas.length;
-          // console.log((quantity * price ) * cartItemsInfo.length);
           if (!item.manga) return null;
           return (
             <StyledStackForCardContentItemInCart

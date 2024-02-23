@@ -43,7 +43,6 @@ export function LoginForm() {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("user");
     }, 3600000); //? 1 hour expiration
-    // console.log("User login successfully:", data);
     window.location.href = "/";
   };
 
@@ -73,7 +72,6 @@ export function LoginForm() {
     if (isValid) {
       await loginUser(formData);
       setError("");
-      // console.log("handleSubmit", formData);
     }
   };
 

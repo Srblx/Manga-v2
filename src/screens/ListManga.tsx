@@ -101,12 +101,17 @@ export function ListManga() {
         spacing={1}
         flexWrap="wrap"
         key={index}
-        sx={{ gap: "1rem 0"}}
+        sx={{ gap: "1rem 0" }}
       >
         {(page.data as MangaModelData[]).map((manga) => {
           return (
-            <StyledDivContentMangaCard ref={ref} key={manga.mal_id} >
-              <MangaCard key={manga.mal_id} manga={manga} price={19.98} isAuthenticated={userName !== ""}/>
+            <StyledDivContentMangaCard ref={ref} key={manga.mal_id}>
+              <MangaCard
+                key={manga.mal_id}
+                manga={manga}
+                price={19.98}
+                isAuthenticated={userName !== ""}
+              />
             </StyledDivContentMangaCard>
           );
         })}
@@ -116,7 +121,11 @@ export function ListManga() {
 
   return (
     <>
-      <Styledh1ForListManga><span style={{color: "rgb(68, 68, 68)"}}>Welcom {userName}</span><br />TO THE MANGA LIBRARY</Styledh1ForListManga>
+      <Styledh1ForListManga>
+        <span style={{ color: "rgb(68, 68, 68)" }}>Welcom {userName}</span>
+        <br />
+        TO THE MANGA LIBRARY
+      </Styledh1ForListManga>
       <StyledStackContentBoxSearchBar>
         <StyledBoxContentSearchBar>
           <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
