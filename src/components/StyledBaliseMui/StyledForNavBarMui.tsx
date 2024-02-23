@@ -1,4 +1,5 @@
 import { Box, Typography, styled } from "@mui/material";
+import { Link } from "react-router-dom";
 
 
 //TODO STYLED FOR NAV BAR
@@ -15,7 +16,7 @@ export const StyledBoxForNavBar = styled(Box)(/*( { visible }: { visible: boolea
 export const StyledTypographyForNavBar = styled(Typography)({
     flexGrow: 1, 
     color: "white", 
-    fontWeight: "bold"
+    fontWeight: "bold",
 });
 
 export const StyledDivForTabletInCartIcon = styled("div")({
@@ -34,3 +35,8 @@ export const StyledDivForTabletInCartIcon = styled("div")({
     fontWeight: "bold"
 });
 
+
+export const StyledForLinkInNav = styled(Link)({
+    textDecoration: "none", 
+    color: "white"
+});

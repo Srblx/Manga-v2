@@ -4,6 +4,9 @@ import SingleManga from "../SingleManga";
 import { ShoppingCartProvider } from "../../context/ShoppingCartContext";
 import { PageNumberProvider } from "../../context/PageNumberProvider";
 import NavBar from "../../components/NavBar.component";
+import { About } from "../About";
+import { Login } from "../Login";
+import { SignUp } from "../SignUp";
 
 export function Screens() {
   return (
@@ -14,6 +17,10 @@ export function Screens() {
           <Routes>
             <Route path="/" element={<ListManga />} />
             <Route path="/:id" element={<SingleManga />} />
+            <Route path="/" element={<ListManga />} />
+            <Route path="/about" element={<About />}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/signup" element={<SignUp/>}/>
           </Routes>
         </PageNumberProvider>
       </ShoppingCartProvider>
