@@ -1,6 +1,6 @@
 import Stack from "@mui/material/Stack";
 import { LabelCustom } from "../UnderComponents/LabelCustom.component";
-import TextFieldCustom from "../UnderComponents/TextFieldCustom.component";
+import TextFieldCustom, { TextFielCustomPassword } from "../UnderComponents/TextFieldCustom.component";
 import Grid from "@mui/material/Grid";
 import { ButtonCustom } from "../UnderComponents/BtnCustom.component";
 import {
@@ -12,9 +12,14 @@ import {
   StyledStackForm,
 } from "../StyledBaliseMui/StyledForLoginForm";
 import { useState } from "react";
-import { FormSignUpData } from "../../interfaces/LoginSignUpInterface";
+import {
+  CreateUserDto,
+  FormSignUpData,
+} from "../../interfaces/LoginSignUpInterface";
 import { validateFormSingUp } from "../../utils/ValidForm";
 import { RequiredField } from "../UnderComponents/RequireField.component";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export function SignUpForm() {
   const [formData, setFormData] = useState<FormSignUpData>({});
@@ -28,10 +33,49 @@ export function SignUpForm() {
     }));
   };
 
-  const handleSubmit = () => {
+  
+  const handleError = (error: Error) => {
+    setError(error.message || "An error occurred during registration.");
+  };
+
+  const handleSuccess = (/* data: any */) => {
+    setError("");
+    // console.log("User registered successfully:", data);
+    // window.location.href = "/login";
+  };
+
+  const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
+    const { confirmPassword, ...userData } = formData;
+    return { ...userData, role: "USER" };
+  };
+
+  const { mutate: signUpUser, isPending } = useMutation({
+    mutationFn: async (userData: CreateUserDto) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/v1/auth/register/",
+          userData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return response.data;
+      } catch (error: any) {
+        throw new Error("Registration error: " + error.message);
+      }
+    },
+    onError: handleError,
+    onSuccess: handleSuccess,
+  });
+
+  const handleSubmit = async () => {
     const isValid = validateFormSingUp(formData, setError);
     if (isValid) {
-      console.log("Form Data:", formData);
+      const userData = transformFormDataToDto(formData);
+      await signUpUser(userData);
+      console.log('userData : ', userData);
       setError("");
     }
   };
@@ -50,8 +94,10 @@ export function SignUpForm() {
             direction="column"
             alignItems="start"
           >
-            <StyledH1TitleLoginForm>S'inscrire</StyledH1TitleLoginForm>
-            <LabelCustom margin="2em 0 .1em 0">Lastname <RequiredField/></LabelCustom>
+            <StyledH1TitleLoginForm>Sign up</StyledH1TitleLoginForm>
+            <LabelCustom margin="2em 0 .1em 0">
+              Lastname <RequiredField />
+            </LabelCustom>
             <TextFieldCustom
               name="lastname"
               value={formData.lastname}
@@ -60,7 +106,9 @@ export function SignUpForm() {
               variant="outlined"
               placeholder="Lastname"
             />
-            <LabelCustom margin="2em 0 .1em 0">Firstname <RequiredField/></LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">
+              Firstname <RequiredField />
+            </LabelCustom>
             <TextFieldCustom
               value={formData.firstname}
               onChange={handleChange}
@@ -69,7 +117,9 @@ export function SignUpForm() {
               variant="outlined"
               placeholder="Firstname"
             />
-            <LabelCustom margin="2em 0 .1em 0">E-Mail address <RequiredField/></LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">
+              E-Mail address <RequiredField />
+            </LabelCustom>
             <TextFieldCustom
               value={formData.email}
               onChange={handleChange}
@@ -78,14 +128,16 @@ export function SignUpForm() {
               variant="outlined"
               placeholder="E-mail address"
             />
-            <LabelCustom margin="2em 0 .1em 0">Password <RequiredField/></LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">
+              Password <RequiredField />
+            </LabelCustom>
             <Grid
               container
               direction="row"
               justifyContent="flex-end"
               alignItems="center"
             >
-              <TextFieldCustom
+              <TextFielCustomPassword
                 value={formData.password}
                 onChange={handleChange}
                 name="password"
@@ -94,8 +146,10 @@ export function SignUpForm() {
                 placeholder="Password"
               />
             </Grid>
-            <LabelCustom margin="2em 0 .1em 0">Confirm password <RequiredField/></LabelCustom>
-            <TextFieldCustom
+            <LabelCustom margin="2em 0 .1em 0">
+              Confirm password <RequiredField />
+            </LabelCustom>
+            <TextFielCustomPassword
               value={formData.confirmPassword}
               onChange={handleChange}
               name="confirmPassword"
@@ -125,8 +179,9 @@ export function SignUpForm() {
               0px 4px 6px -2px rgba(103, 194, 254, 0.606),
               0px 5px 12px 4px rgba(120, 128, 220, 0.46)"
             onClick={handleSubmit}
+            disabled={isPending}
           >
-            Sign Up
+            {isPending ? "Signing Up..." : "Sign Up"}
           </ButtonCustom>
           <StyledParagrapheIfNotAccount>
             You already have an account ?{" "}

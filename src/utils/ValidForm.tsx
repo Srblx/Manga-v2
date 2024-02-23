@@ -59,4 +59,5 @@ export const validateFormLogin = (
     setError("Please fill in all fields.");
     return false;
   }
+  return true;
 };

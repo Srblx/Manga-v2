@@ -6,6 +6,14 @@ export interface FormSignUpData {
   confirmPassword?: string;
 }
 
+export interface CreateUserDto {
+  lastname?: string;
+  firstname?: string;
+  email?: string;
+  password?: string;
+  role: "USER";
+}
+
 export interface FormLoginData {
   email?: string;
   password?: string;

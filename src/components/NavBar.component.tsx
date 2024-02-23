@@ -17,6 +17,7 @@ import { useShoppingCart } from "../context/ShoppingCartContext";
 import { DrawerCart } from "./DrawerCart.component";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { Link } from "react-router-dom";
+import PositionedMenu from "./LoginSignUp/MenuUser.component";
 
 export default function NavBar() {
   const [previousScrollPosition, setPreviousScrollPosition] = useState(
@@ -49,14 +50,9 @@ export default function NavBar() {
     <StyledBoxForNavBar sx={{ ...(visible ? { top: 0 } : { top: "-80px" }) }}>
       <AppBar position="static">
         <Toolbar sx={{ background: "black" }}>
-          <Typography>
-            <IconButton>
-              <StyledForLinkInNav to={`login`}><AccountCircleRoundedIcon
-                fontSize="large"
-                sx={{ color: "white", marginRight: ".8rem", display: "center", justifyContent:"center", alignItems: "center" }}
-              /></StyledForLinkInNav>
-            </IconButton>
-          </Typography>
+          {/* <Typography> */}
+            <PositionedMenu />
+          {/* </Typography> */}
           <StyledTypographyForNavBar variant="h6">
             <StyledForLinkInNav to={`/`}>Home</StyledForLinkInNav>
           </StyledTypographyForNavBar>

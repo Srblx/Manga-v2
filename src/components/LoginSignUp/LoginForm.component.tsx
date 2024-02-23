@@ -1,12 +1,11 @@
 import Stack from "@mui/material/Stack";
 import { LabelCustom } from "../UnderComponents/LabelCustom.component";
-import TextFieldCustom from "../UnderComponents/TextFieldCustom.component";
+import TextFieldCustom, { TextFielCustomPassword } from "../UnderComponents/TextFieldCustom.component";
 import Grid from "@mui/material/Grid";
 import { ButtonCustom } from "../UnderComponents/BtnCustom.component";
 import {
   StyledH1TitleLoginForm,
   StyledLink,
-  StyledParagrapheForgottenPassword,
   StyledParagrapheIfNotAccount,
   StyledSpanIfNotAccountGoToSignUp,
   StyledStackContentAllForm,
@@ -16,6 +15,8 @@ import { useState } from "react";
 import { FormLoginData } from "../../interfaces/LoginSignUpInterface";
 import { validateFormLogin } from "../../utils/ValidForm";
 import { RequiredField } from "../UnderComponents/RequireField.component";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export function LoginForm() {
   const [formData, setFormData] = useState<FormLoginData>({});
@@ -29,11 +30,44 @@ export function LoginForm() {
     }));
   };
 
-  const handleSubmit = () => {
+  
+  const handleError = (error: Error) => {
+    setError(error.message || "An error occurred during login.");
+  };
+
+  const handleSuccess = (data: any) => {
+    setError("");
+    console.log("User login successfully:", data);
+    // window.location.href = "/";
+  };
+
+  const { mutate: loginUser, isPending } = useMutation({
+    mutationFn: async (userData: FormLoginData) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/v1/auth/login",
+          userData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return response.data;
+      } catch (error: any) {
+        throw new Error("Login error: " + error.message);
+      }
+    },
+    onError: handleError,
+    onSuccess: handleSuccess,
+  });
+
+  const handleSubmit = async () => {
     const isValid = validateFormLogin(formData, setError);
     if (isValid) {
-      console.log("formDataLogin : ", formData);
+      await loginUser(formData);
       setError("");
+      console.log("handleSubmit", formData);
     }
   };
 
@@ -52,33 +86,34 @@ export function LoginForm() {
             alignItems="start"
           >
             <StyledH1TitleLoginForm>Login</StyledH1TitleLoginForm>
-            <LabelCustom margin="2em 0 .1em 0">E-mail address <RequiredField/></LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">
+              E-Mail address <RequiredField />
+            </LabelCustom>
             <TextFieldCustom
-              name="email"
               value={formData.email}
               onChange={handleChange}
+              name="email"
               id="outlined-basic"
               variant="outlined"
               placeholder="E-mail address"
             />
-            <LabelCustom margin="2em 0 .1em 0">Password <RequiredField/></LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">
+              Password <RequiredField />
+            </LabelCustom>
             <Grid
               container
               direction="row"
               justifyContent="flex-end"
               alignItems="center"
             >
-              <TextFieldCustom
-                name="password"
+              <TextFielCustomPassword
                 value={formData.password}
                 onChange={handleChange}
+                name="password"
                 id="outlined-basic"
                 variant="outlined"
                 placeholder="Password"
               />
-              <StyledParagrapheForgottenPassword>
-                Password forgotten ?
-              </StyledParagrapheForgottenPassword>
             </Grid>
           </Stack>
           {error && (
@@ -102,8 +137,9 @@ export function LoginForm() {
               0px 4px 6px -2px rgba(103, 194, 254, 0.606),
               0px 5px 12px 4px rgba(120, 128, 220, 0.46)"
             onClick={handleSubmit}
+            disabled={isPending}
           >
-            Login
+            {isPending ? "Logining..." : "Login"}
           </ButtonCustom>
           <StyledParagrapheIfNotAccount>
             You don't have an account ?{" "}
