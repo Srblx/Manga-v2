@@ -3,7 +3,6 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -64,6 +63,7 @@ export function TextFielCustomPassword(props: any) {
           placeholder={props.placeholder}
           value={props.value}
           onChange={props.onChange}
+          name={props.name}
           sx={{
             background: "#F3F3F3",
             "& fieldset": { border: "none" },
