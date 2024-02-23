@@ -14,7 +14,7 @@ const StyledMenuItem = styled(MenuItem)({
   textDecoration: "none"
 });
 
-export default function PositionedMenu() {
+export default function PositionedMenu({ isAuthenticated }: { isAuthenticated: boolean }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -24,6 +24,12 @@ export default function PositionedMenu() {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    handleClose();
+    window.location.reload();
+  };
+  console.log('isAuthenticated : ', isAuthenticated);
   return (
     <div>
       <Button
@@ -66,25 +72,53 @@ export default function PositionedMenu() {
           },
         }}
       >
-        <StyledMenuItem onClick={handleClose}>
-          <Link
-            to={`/login`}
-            style={{
-              color: "black",
-              textDecoration: "none",
-            }}
-          >
-            Login
-          </Link>
-        </StyledMenuItem>
-        <StyledMenuItem onClick={handleClose}>
-          <Link
-            to={`/signup`}
-            style={{ color: "black", textDecoration: "none" }}
-          >
-            Sign Up
-          </Link>
-        </StyledMenuItem>
+       {!isAuthenticated && (
+            <div>
+              <StyledMenuItem onClick={handleClose}>
+              <Link
+                to={`/login`}
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+                }}
+              >
+                Login
+              </Link>
+            </StyledMenuItem>
+            <StyledMenuItem onClick={handleClose}>
+              <Link
+                to={`/signup`}
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                Sign Up
+              </Link>
+            </StyledMenuItem>
+            </div>
+        )}
+        {isAuthenticated && (
+            <div>
+              <StyledMenuItem onClick={handleClose}>
+              <Link
+                to={`/profile`}
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+                }}
+              >
+                Profile
+              </Link>
+            </StyledMenuItem>
+            <StyledMenuItem onClick={handleClose}>
+              <Link
+                to={`/`}
+                onClick={handleLogout}
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                Log Out
+              </Link>
+            </StyledMenuItem>
+            </div>
+        )}
       </Menu>
     </div>
   );

@@ -37,8 +37,14 @@ export function LoginForm() {
 
   const handleSuccess = (data: any) => {
     setError("");
-    console.log("User login successfully:", data);
-    // window.location.href = "/";
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    setTimeout(() => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+    }, 3600000); //? 1 hour expiration
+    // console.log("User login successfully:", data);
+    window.location.href = "/";
   };
 
   const { mutate: loginUser, isPending } = useMutation({
@@ -67,7 +73,7 @@ export function LoginForm() {
     if (isValid) {
       await loginUser(formData);
       setError("");
-      console.log("handleSubmit", formData);
+      // console.log("handleSubmit", formData);
     }
   };
 

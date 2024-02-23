@@ -16,7 +16,7 @@ export const Styledh1ForListManga = styled("h1")({
   marginTop: "4.5rem",
   color: "black",
   paddingTop: "1rem",
-  textTransform: "uppercase",
+  // textTransform: "uppercase",
   background: "white",
   width: "100%",
   textAlign: "center",

@@ -41,7 +41,7 @@ export function SignUpForm() {
   const handleSuccess = (/* data: any */) => {
     setError("");
     // console.log("User registered successfully:", data);
-    // window.location.href = "/login";
+    window.location.href = "/login";
   };
 
   const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
@@ -75,7 +75,7 @@ export function SignUpForm() {
     if (isValid) {
       const userData = transformFormDataToDto(formData);
       await signUpUser(userData);
-      console.log('userData : ', userData);
+      // console.log('userData : ', userData);
       setError("");
     }
   };

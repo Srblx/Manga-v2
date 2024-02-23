@@ -7,6 +7,7 @@ import NavBar from "../../components/NavBar.component";
 import { About } from "../About";
 import { Login } from "../Login";
 import { SignUp } from "../SignUp";
+import { Profile } from "../Profile";
 
 export function Screens() {
   return (
@@ -21,6 +22,7 @@ export function Screens() {
             <Route path="/about" element={<About />}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<SignUp/>}/>
+            <Route path="/profile" element={<Profile/>}/>
           </Routes>
         </PageNumberProvider>
       </ShoppingCartProvider>

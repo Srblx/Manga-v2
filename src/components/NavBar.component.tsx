@@ -8,15 +8,10 @@ import {
 import {
   AppBar,
   Button,
-  IconButton,
-  Stack,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { DrawerCart } from "./DrawerCart.component";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { Link } from "react-router-dom";
 import PositionedMenu from "./LoginSignUp/MenuUser.component";
 
 export default function NavBar() {
@@ -26,6 +21,16 @@ export default function NavBar() {
   const [visible, setVisible] = useState<boolean>(true);
   const [isOpen, setIsOpen] = useState(false);
   const { cartQuantity } = useShoppingCart();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []); 
 
   //! callBack pour eviter de la recréé a chaque rendu
   const handleScroll = useCallback(() => {
@@ -45,13 +50,13 @@ export default function NavBar() {
   const handleCloseCart = () => {
     setIsOpen(false);
   };
-
+  console.log('isAuthenticated from navbar : ', isAuthenticated);
   return (
     <StyledBoxForNavBar sx={{ ...(visible ? { top: 0 } : { top: "-80px" }) }}>
       <AppBar position="static">
         <Toolbar sx={{ background: "black" }}>
           {/* <Typography> */}
-            <PositionedMenu />
+          <PositionedMenu isAuthenticated={isAuthenticated} />
           {/* </Typography> */}
           <StyledTypographyForNavBar variant="h6">
             <StyledForLinkInNav to={`/`}>Home</StyledForLinkInNav>

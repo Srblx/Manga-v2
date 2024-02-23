@@ -25,9 +25,10 @@ import { formatCurrency } from "../utils/FormatCurrency";
 type MangaItemsProps = {
   manga: MangaModelData;
   price: number;
+  isAuthenticated: boolean
 };
 
-export function MangaCard({ manga, price }: MangaItemsProps) {
+export function MangaCard({ manga, price, isAuthenticated }: MangaItemsProps) {
   const {
     getItemQuantity,
     increaseCartQuantity,
@@ -70,7 +71,9 @@ export function MangaCard({ manga, price }: MangaItemsProps) {
             </Typography>
           )}
           <StyledStackForAddToCart direction="row" spacing={3}>
-            {quantity === 0 ? (
+          {isAuthenticated ? (
+              <>
+              {quantity === 0 ? (
               <Button
                 onClick={handleAddToCartClick}
                 startIcon={<AddShoppingCartIcon />}
@@ -129,6 +132,12 @@ export function MangaCard({ manga, price }: MangaItemsProps) {
                   </IconButton>
                 )}
               </Stack>
+            )}
+            </>
+            ) : (
+              <Typography variant="body2" color="error" sx={{fontWeight: "bold"}}>
+                Please log in to add to cart
+              </Typography>
             )}
             <StyledSpanPrice>{formatCurrency(price)}</StyledSpanPrice>
           </StyledStackForAddToCart>
