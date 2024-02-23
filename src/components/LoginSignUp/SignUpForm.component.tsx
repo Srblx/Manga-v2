@@ -14,8 +14,7 @@ import {
 import { useState } from "react";
 import { FormSignUpData } from "../../interfaces/LoginSignUpInterface";
 import { validateFormSingUp } from "../../utils/ValidForm";
-
-
+import { RequiredField } from "../UnderComponents/RequireField.component";
 
 export function SignUpForm() {
   const [formData, setFormData] = useState<FormSignUpData>({});
@@ -33,7 +32,7 @@ export function SignUpForm() {
     const isValid = validateFormSingUp(formData, setError);
     if (isValid) {
       console.log("Form Data:", formData);
-      setError(""); 
+      setError("");
     }
   };
 
@@ -52,7 +51,7 @@ export function SignUpForm() {
             alignItems="start"
           >
             <StyledH1TitleLoginForm>S'inscrire</StyledH1TitleLoginForm>
-            <LabelCustom margin="2.8em 0 .1em 0">Lastname</LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">Lastname <RequiredField/></LabelCustom>
             <TextFieldCustom
               name="lastname"
               value={formData.lastname}
@@ -61,7 +60,7 @@ export function SignUpForm() {
               variant="outlined"
               placeholder="Lastname"
             />
-            <LabelCustom margin="2.8em 0 .1em 0">Firstname</LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">Firstname <RequiredField/></LabelCustom>
             <TextFieldCustom
               value={formData.firstname}
               onChange={handleChange}
@@ -70,7 +69,7 @@ export function SignUpForm() {
               variant="outlined"
               placeholder="Firstname"
             />
-            <LabelCustom margin="2.8em 0 .1em 0">E-Mail address</LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">E-Mail address <RequiredField/></LabelCustom>
             <TextFieldCustom
               value={formData.email}
               onChange={handleChange}
@@ -79,7 +78,7 @@ export function SignUpForm() {
               variant="outlined"
               placeholder="E-mail address"
             />
-            <LabelCustom margin="2em 0 .1em 0">Password</LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">Password <RequiredField/></LabelCustom>
             <Grid
               container
               direction="row"
@@ -95,7 +94,7 @@ export function SignUpForm() {
                 placeholder="Password"
               />
             </Grid>
-            <LabelCustom margin="2.8em 0 .1em 0">Confirm password</LabelCustom>
+            <LabelCustom margin="2em 0 .1em 0">Confirm password <RequiredField/></LabelCustom>
             <TextFieldCustom
               value={formData.confirmPassword}
               onChange={handleChange}
@@ -106,8 +105,16 @@ export function SignUpForm() {
             />
           </Stack>
           {error && (
-          <div style={{ color: "red", textAlign: "center", marginBottom:".5rem" }}>{error}</div>
-        )}
+            <div
+              style={{
+                color: "red",
+                textAlign: "center",
+                marginBottom: ".5rem",
+              }}
+            >
+              {error}
+            </div>
+          )}
           <ButtonCustom
             type="submit"
             background="#0B51E7"
