@@ -17,6 +17,7 @@ import { TextField } from "@mui/material";
 import { ErrorDisplayManga } from "../components/ErrorDisplayMangaList.component";
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
 import ScrollToTopButton from "../components/BtnScrollTop.component";
+import axios from "axios";
 
 export function ListManga() {
   const { ref, inView } = useInView();
@@ -56,19 +57,20 @@ export function ListManga() {
     }
   }, [inputRef.current]);
 
+  
+
   const fetchManga = async (
     { pageParam }: { pageParam: number },
     searchValue: string
   ): Promise<{ data: MangaModelData; pagination: any }> => {
-    const apiUrl = `https://api.jikan.moe/v4/manga?sfw=true&page=${pageParam}${
-      searchValue ? `&q=${searchValue}` : ""
-    }`;
-
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
+    const apiUrl = `https://api.jikan.moe/v4/manga?sfw=true&page=${pageParam}${searchValue ? `&q=${searchValue}` : ""}`;
+  
+    try {
+      const response = await axios.get(apiUrl);
+      return response.data;
+    } catch (error) {
       throw new Error(networkError);
     }
-    return response.json();
   };
 
   const {

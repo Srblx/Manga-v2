@@ -1,19 +1,21 @@
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
 export function Profile() {
   const [userFirstname, setUserFirstname] = useState("");
   const [userLastname, setUserLastname] = useState("");
   const [userRole, setUserRole] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
       const userName = JSON.parse(user);
-      const { firstname, lastname, role } = userName;
+      const { firstname, lastname, role, email } = userName;
       setUserFirstname(`${firstname}`);
       setUserLastname(`${lastname} `);
       setUserRole(`${role}`);
+      setUserEmail(`${email}`);
     }
   }, []);
 
@@ -38,16 +40,16 @@ export function Profile() {
           }}
         />
       </Stack>
-      <Stack sx={{justifyContent: "center", alignItems: "center"}}>
+      <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
         <ul
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-around", 
+            justifyContent: "space-around",
             background: "#000000e9",
-            width: "90%",
+            width: "100%",
             color: "white",
-            fontSize: "2rem",
+            fontSize: "1.4rem",
             padding: 0,
             margin: 0,
             border: "solid white 2px",
@@ -56,8 +58,20 @@ export function Profile() {
         >
           <li style={{ listStyle: "none" }}>Firstname : {userLastname} </li> |
           <li style={{ listStyle: "none" }}>Lastname : {userFirstname} </li> |
+          <li style={{ listStyle: "none" }}>Email : {userEmail} </li> |
           <li style={{ listStyle: "none" }}>Role : {userRole}</li>
         </ul>
+        <Button
+          sx={{
+            background: "white",
+            padding: ".5rem",
+            marginTop: "1rem",
+            border: "solid 2px black",
+          }}
+          // onClick={}
+        >
+          Change password
+        </Button>
       </Stack>
     </>
   );

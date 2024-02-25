@@ -13,6 +13,7 @@ import {
   StyledParagrapheContentTotalCart,
   StyledStackForCardContentItemInCart,
 } from "./StyledBaliseMui/StyledForDrawer";
+import axios from "axios";
 
 type ShoppingCartProps = {
   openCart: boolean;
@@ -43,19 +44,12 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
 
   const fetchCartItemsInfo = async () => {
     try {
-      const fetchPromises = ItemsInCartClient.map(async (item) => {
-        const response = await fetch(
-          `https://api.jikan.moe/v4/manga/${item.id}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        return data.data as MangaModelData;
+      const axiosRequests = ItemsInCartClient.map(async (item) => {
+        const response = await axios.get(`https://api.jikan.moe/v4/manga/${item.id}`);
+        return response.data.data as MangaModelData;
       });
-
-      const cartItemsInfoResponses = await Promise.all(fetchPromises);
+  
+      const cartItemsInfoResponses = await Promise.all(axiosRequests);
       return cartItemsInfoResponses.filter(Boolean);
     } catch (error) {
       console.error("Error fetching cart items info:", error);

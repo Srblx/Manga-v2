@@ -6,30 +6,45 @@ import IconButton from "@mui/material/IconButton";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const StyledMenuItem = styled(MenuItem)({
   fontSize: "1.5rem",
   paddingRight: "2rem",
-  color: "black", 
-  textDecoration: "none"
+  color: "black",
+  textDecoration: "none",
 });
 
-export default function PositionedMenu({ isAuthenticated }: { isAuthenticated: boolean }) {
+export default function PositionedMenu({
+  isAuthenticated,
+}: {
+  isAuthenticated: boolean;
+}) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [openModal, setOpenModal] = React.useState(false);
+
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const handleLogout = () => {
+    setOpenModal(true);
+  };
+
+  const handleConfirmLogout = () => {
     localStorage.clear();
     handleClose();
     window.location.reload();
   };
-  
+
   return (
     <div>
       <Button
@@ -72,9 +87,9 @@ export default function PositionedMenu({ isAuthenticated }: { isAuthenticated: b
           },
         }}
       >
-       {!isAuthenticated && (
-            <div>
-              <StyledMenuItem onClick={handleClose}>
+        {!isAuthenticated && (
+          <div>
+            <StyledMenuItem onClick={handleClose}>
               <Link
                 to={`/login`}
                 style={{
@@ -93,11 +108,11 @@ export default function PositionedMenu({ isAuthenticated }: { isAuthenticated: b
                 Sign Up
               </Link>
             </StyledMenuItem>
-            </div>
+          </div>
         )}
         {isAuthenticated && (
-            <div>
-              <StyledMenuItem onClick={handleClose}>
+          <div>
+            <StyledMenuItem onClick={handleClose}>
               <Link
                 to={`/profile`}
                 style={{
@@ -108,18 +123,45 @@ export default function PositionedMenu({ isAuthenticated }: { isAuthenticated: b
                 Profile
               </Link>
             </StyledMenuItem>
-            <StyledMenuItem onClick={handleClose}>
-              <Link
-                to={`/`}
-                onClick={handleLogout}
-                style={{ color: "black", textDecoration: "none" }}
-              >
-                Log Out
-              </Link>
-            </StyledMenuItem>
-            </div>
+            <StyledMenuItem onClick={handleLogout}>Logout</StyledMenuItem>
+          </div>
         )}
       </Menu>
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "white",
+            boxShadow: 24,
+            p: 4,
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="h6">
+            <strong>Are you sure you want to logout?</strong>
+            <br />
+            If you log out you won't be able to add any more items to your cart
+            and the items currently in your cart will be lost.{" "}
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ background: "red", margin: ".8rem .5rem" }}
+            onClick={handleConfirmLogout}
+          >
+            Yes
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ background: "blue", margin: ".8rem .5rem" }}
+            onClick={() => setOpenModal(false)}
+          >
+            No
+          </Button>
+        </Box>
+      </Modal>
     </div>
   );
 }
