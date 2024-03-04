@@ -39,6 +39,7 @@ export function LoginForm() {
     setError("");
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("user", JSON.stringify(data.user));
+    console.log('data.accessToken : ', data.accessToken);
     setTimeout(() => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("user");
@@ -58,6 +59,7 @@ export function LoginForm() {
             },
           }
         );
+        console.log('response.data : ', response.data);
         return response.data;
       } catch (error: any) {
         throw new Error("Login error: " + error.message);

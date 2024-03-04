@@ -4,10 +4,11 @@ import SingleManga from "../SingleManga";
 import { ShoppingCartProvider } from "../../context/ShoppingCartContext";
 import { PageNumberProvider } from "../../context/PageNumberProvider";
 import NavBar from "../../components/NavBar.component";
-import { About } from "../About";
+import { News } from "../News";
 import { Login } from "../Login";
 import { SignUp } from "../SignUp";
 import { Profile } from "../Profile";
+import { AddNews } from "../AddNews";
 
 export function Screens() {
   return (
@@ -19,10 +20,11 @@ export function Screens() {
             <Route path="/" element={<ListManga />} />
             <Route path="/:id" element={<SingleManga />} />
             <Route path="/" element={<ListManga />} />
-            <Route path="/about" element={<About />}/>
+            <Route path="/news" element={<News />}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<SignUp/>}/>
             <Route path="/profile" element={<Profile/>}/>
+            <Route path="/AddNews" element={<AddNews/>}/>
           </Routes>
         </PageNumberProvider>
       </ShoppingCartProvider>

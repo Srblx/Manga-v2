@@ -43,6 +43,7 @@ export default function PositionedMenu({
     localStorage.clear();
     handleClose();
     window.location.reload();
+    window.location.href = "/";
   };
 
   return (

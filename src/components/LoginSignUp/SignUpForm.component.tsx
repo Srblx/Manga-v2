@@ -73,7 +73,7 @@ export function SignUpForm() {
     const isValid = validateFormSingUp(formData, setError);
     if (isValid) {
       const userData = transformFormDataToDto(formData);
-      await signUpUser(userData);w
+      await signUpUser(userData);
       setError("");
     }
   };

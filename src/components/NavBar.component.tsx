@@ -50,14 +50,14 @@ export default function NavBar() {
   const handleCloseCart = () => {
     setIsOpen(false);
   };
+
+  const accessToken = window.localStorage.getItem("accessToken");
   
   return (
     <StyledBoxForNavBar sx={{ ...(visible ? { top: 0 } : { top: "-80px" }) }}>
       <AppBar position="static">
         <Toolbar sx={{ background: "black" }}>
-          {/* <Typography> */}
           <PositionedMenu isAuthenticated={isAuthenticated} />
-          {/* </Typography> */}
           <StyledTypographyForNavBar variant="h6">
             <StyledForLinkInNav to={`/`}>Home</StyledForLinkInNav>
           </StyledTypographyForNavBar>
@@ -65,8 +65,11 @@ export default function NavBar() {
             <StyledForLinkInNav to={`/`}>Store</StyledForLinkInNav>
           </StyledTypographyForNavBar>
           <StyledTypographyForNavBar variant="h6">
-            <StyledForLinkInNav to={`about`}>About</StyledForLinkInNav>
+            <StyledForLinkInNav to={`news`}>News</StyledForLinkInNav>
           </StyledTypographyForNavBar>
+          {accessToken && <StyledTypographyForNavBar variant="h6">
+            <StyledForLinkInNav to={`addNews`}>Add News</StyledForLinkInNav>
+          </StyledTypographyForNavBar>}
           <Button
             color="inherit"
             sx={{ margin: "10px" }}
