@@ -44,7 +44,7 @@ export function SignUpForm() {
   };
 
   const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
-    const { confirmPassword, ...userData } = formData;
+    const { confirmPassword, ...userData } = formData; // xCommx confirmPassword deconstruit mais pas utilisé
     return { ...userData, role: "USER" };
   };
 

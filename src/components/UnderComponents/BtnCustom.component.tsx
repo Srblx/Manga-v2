@@ -28,7 +28,8 @@ export function ButtonCustom(props: any) {
           },
         }}
       >
-        {capitalizeFirstLetter(props.children)}
+        {capitalizeFirstLetter(props.children)} 
+        {/* // xCommx children est une props protégée par react qui peut etre un component, plutot utiliser "textContent" ou quelquechose du genre */}
       </Button>
     </Stack>
   );

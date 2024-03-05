@@ -43,7 +43,7 @@ export function LoginForm() {
     setTimeout(() => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("user");
-    }, 3600000); //? 1 hour expiration
+    }, 3600000); //? 1 hour expiration xCommx l'expiration sera gérée par le backend
     window.location.href = "/";
   };
 

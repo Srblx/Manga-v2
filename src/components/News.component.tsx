@@ -45,7 +45,7 @@ export function ShowNews(){
                 </StyledStackContentDescription>
                 <Stack
                   direction="row"
-                  sx={{
+                  sx={{ // xCommx tu peux utiliser les props de Stack justifyContent et alignItems
                     justifyContent: "space-between",
                     alignItems: "center",
                   }}

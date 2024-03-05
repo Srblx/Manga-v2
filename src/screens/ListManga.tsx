@@ -55,14 +55,14 @@ export function ListManga() {
         subscription.unsubscribe();
       };
     }
-  }, [inputRef.current]);
+  }, [inputRef.current]); // xCommx pas besoin de cette dépendance car inputRef ne change jamais grace à useRef
 
   
 
   const fetchManga = async (
     { pageParam }: { pageParam: number },
     searchValue: string
-  ): Promise<{ data: MangaModelData; pagination: any }> => {
+  ): Promise<{ data: MangaModelData; pagination: any }> => { // xCommx créer l'interface à l'aide de transform.tools + ici MangaModelData est une array: MangaModelData[]
     const apiUrl = `https://api.jikan.moe/v4/manga?sfw=true&page=${pageParam}${searchValue ? `&q=${searchValue}` : ""}`;
   
     try {
@@ -96,7 +96,7 @@ export function ListManga() {
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
-  const content = dataFromQuery?.pages.map((page: any, index) => {
+  const content = dataFromQuery?.pages.map((page, index) => {
     return (
       <StyledStackForAllCardManga
         direction="row"
@@ -105,7 +105,7 @@ export function ListManga() {
         key={index}
         sx={{ gap: "1rem 0" }}
       >
-        {(page.data as MangaModelData[]).map((manga) => {
+        {(page.data as MangaModelData[]).map((manga) => { // plus besoin du "as" quand tu auras mis le bon type en haut (MangaModelData[])
           return (
             <StyledDivContentMangaCard ref={ref} key={manga.mal_id}>
               <MangaCard
@@ -124,7 +124,7 @@ export function ListManga() {
   return (
     <>
       <Styledh1ForListManga>
-        <span style={{ color: "rgb(68, 68, 68)" }}>Welcom {userName}</span>
+        <span style={{ color: "rgb(68, 68, 68)" }}>Welcome {userName}</span>
         <br />
         TO THE MANGA LIBRARY
       </Styledh1ForListManga>
