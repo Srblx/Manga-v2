@@ -18,6 +18,17 @@ import { RequiredField } from "../UnderComponents/RequireField.component";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
+export const requestInterceptor = axios.interceptors.request.use(
+  config => {
+    config.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`;
+    return config; 
+  }, 
+  error => {
+    console.error(error)
+    return Promise.reject(error)
+  }
+  );
+
 export function LoginForm() {
   const [formData, setFormData] = useState<FormLoginData>({});
   const [error, setError] = useState<string>("");
@@ -39,13 +50,18 @@ export function LoginForm() {
     setError("");
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("user", JSON.stringify(data.user));
-    console.log('data.accessToken : ', data.accessToken);
+    localStorage.setItem("userID", data.user.id);
+    localStorage.setItem("userRole", JSON.stringify(data.user.role))
+    console.log('localStorage : ', localStorage.getItem("userID"));
+    console.log('localStorage.getItem(data.user.id) : ', localStorage.getItem("userID"));
     setTimeout(() => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("user");
     }, 3600000); //? 1 hour expiration
     window.location.href = "/";
   };
+
+
 
   const { mutate: loginUser, isPending } = useMutation({
     mutationFn: async (userData: FormLoginData) => {
@@ -59,7 +75,6 @@ export function LoginForm() {
             },
           }
         );
-        console.log('response.data : ', response.data);
         return response.data;
       } catch (error: any) {
         throw new Error("Login error: " + error.message);

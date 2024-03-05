@@ -7,20 +7,66 @@ import {
 } from "@mui/material";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { MangaModelData } from "../interfaces/MangaModelInterface";
-import {
-  StyledLinkForReadMoreInfo,
-  StyledMangaCard,
-  StyledMangaCardContent,
-  StyledSpanPrice,
-  StyledStackContentBtnReadMore,
-  StyledStackForAddToCart,
-  StyledTypographyForInfoMangaInCard,
-} from "./StyledBaliseMui/StyledForCardManga";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { formatCurrency } from "../utils/FormatCurrency";
+import styled from "@emotion/styled";
+import { Card, CardContent } from "@mui/material";
+import { Link } from "react-router-dom";
+
+ const StyledMangaCard = styled(Card)({
+  height: "450px",
+  maxWidth: 345,
+  margin: "10px",
+  transition: "background-color 0.3s",
+});
+
+ const StyledMangaCardContent = styled(CardContent)({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  height: "100%",
+});
+
+ const StyledSpanPrice = styled("span")({
+  fontSize: "18px",
+  color: "#2B7BD4",
+  marginLeft: "10px",
+});
+
+ const StyledStackContentBtnReadMore = styled(Stack)({
+  width: "100%",
+  justifyContent: "flex-end",
+  alignItems: "flex-end",
+});
+
+ const StyledStackForAddToCart = styled(Stack)({
+  marginTop: ".2rem",
+  width: "100%",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
+ const StyledTypographyForInfoMangaInCard = styled(Typography)({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  lineClamp: 6, WebkitLineClamp: 6,
+  display: "-webkit-box",
+  WebkitBoxOrient: "vertical",
+});
+
+ const StyledLinkForReadMoreInfo = styled(Link)({
+  color: "green",
+  fontWeight: "bold",
+  textTransform: "capitalize",
+  textDecoration: "underline",
+  fontSize: "1.2rem",
+  padding: "5px 0px"
+  
+});
+
 
 type MangaItemsProps = {
   manga: MangaModelData;

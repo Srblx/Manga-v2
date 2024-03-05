@@ -2,9 +2,47 @@ import { Stack } from "@mui/material";
 import { SingleMangaModelData } from "../interfaces/MangaModelInterface";
 import { MangaAuthorModel } from "../interfaces/MangaModelInterface";
 import { Link } from "react-router-dom";
-
-import { StyledCustomButton, StyledDivLeftColumn, StyledDivRightColumn, StyledStackContentAllDetail, StyledStackForTitle } from "./StyledBaliseMui/StyledForDetailManga";
 import React from "react";
+import styled from "@emotion/styled";
+
+ const StyledStackForTitle = styled(Stack)({
+  width: "100%",
+  textAlign: "center",
+  fontWeight: "bold",
+});
+
+ const StyledStackContentAllDetail = styled(Stack)({
+  background: "rgba(204, 204, 204, 0.936)",
+  borderRadius: "10px",
+  flexDirection: "row",
+  columnWidth: "10em",
+  columnRule: "2px solid black",
+  padding: ".5rem",
+  margin: "5rem 1rem"
+});
+
+ const StyledDivRightColumn = styled("div")({
+  flex: "1",
+  textAlign: "center",
+  padding: ".5rem",
+  borderRight: "3px solid #d34040",
+});
+
+ const StyledDivLeftColumn = styled("div")({
+  flex: "2",
+  paddingLeft: ".7rem",
+});
+
+ const StyledCustomButton = styled("button")({
+  background: "#2262f7",
+  padding: "5px",
+  border: "2px solid black",
+  borderRadius: "5px",
+  color: "white",
+  fontSize: "large",
+  marginTop: "1.5rem",
+});
+
 
 type SingleMangaItemProps = {
     manga: SingleMangaModelData;

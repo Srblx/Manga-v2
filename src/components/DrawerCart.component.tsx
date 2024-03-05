@@ -8,28 +8,47 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { useQuery } from "@tanstack/react-query";
-import {
-  StyledIconBtnCloseCart,
-  StyledParagrapheContentTotalCart,
-  StyledStackForCardContentItemInCart,
-} from "./StyledBaliseMui/StyledForDrawer";
 import axios from "axios";
+
+
+ const StyledParagrapheContentTotalCart = styled("p")({
+  color: "white",
+  fontSize: "2rem",
+  fontWeight: "bold",
+  textAlign: "center",
+  marginBottom: "2rem",
+});
+
+ const StyledStackForCardContentItemInCart = styled(Stack)({
+  background: " #f4e2e2",
+  padding: ".2rem",
+  borderRadius: "10px",
+  alignItems: "center",
+});
+
+ const StyledIconBtnCloseCart = styled(IconButton)({
+  color: "white",
+  background: "red",
+  width: "100%",
+  borderRadius: "0px 0px 10px 10px",
+  padding: "65px 0px 5px 0px",
+});
+
+ const StyledIconButton = styled(IconButton)({
+    alignItems: "flex-start",
+    background: "black",
+    border: "2px solid white",
+    borderRadius: "10px",
+    width: "100%",
+    "&:hover": {
+      background: "rgb(39, 39, 39);",
+    },
+  });
 
 type ShoppingCartProps = {
   openCart: boolean;
   closeCart: () => void;
 };
-
-const StyledIconButton = styled(IconButton)({
-  alignItems: "flex-start",
-  background: "black",
-  border: "2px solid white",
-  borderRadius: "10px",
-  width: "100%",
-  "&:hover": {
-    background: "rgb(39, 39, 39);",
-  },
-});
 
 export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
   const {

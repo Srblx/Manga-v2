@@ -44,7 +44,7 @@ export function SignUpForm() {
   };
 
   const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
-    const { confirmPassword, ...userData } = formData;
+    const { ...userData } = formData;
     return { ...userData, role: "USER" };
   };
 

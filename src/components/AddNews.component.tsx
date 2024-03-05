@@ -1,14 +1,36 @@
-import { Button, Stack } from "@mui/material";
-import {
-  StyledH1TitleFromAddNews,
-  StyledStackContentTextField,
-  StyledTextFieldNews,
-} from "./StyledBaliseMui/StyledForAddNews";
+import { Button, Stack, TextField  } from "@mui/material";
 import { useState } from "react";
 import { AddNewsForm } from "../interfaces/NewsModel";
 import { validateFormAddNews } from "../utils/ValidForm";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { requestInterceptor } from "./LoginSignUp/LoginForm.component";
+import styled from "@emotion/styled";
+
+ const StyledStackContentTextField = styled(Stack)({
+    marginTop: "10rem",
+    background: "#000000b5",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "60%",
+    border: "solid .5rem white",
+    borderRadius: "5px",
+    padding: "3rem",
+  });
+  
+   const StyledTextFieldNews = styled(TextField)({
+    background: "white",
+    width: "75%",
+    borderRadius: "3px",
+    margin: "1.5rem",
+  });
+  
+   const StyledH1TitleFromAddNews = styled("h1")({
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "3rem",
+    padding: "1rem 0 2rem 0",
+  });
 
 export function FormAddNews() {
   const [formData, setFormData] = useState<AddNewsForm>({});
@@ -32,19 +54,13 @@ export function FormAddNews() {
     }));
   };
 
-  const { mutate: addNews, isPending } = useMutation({
+  const { mutate: addNews/* , isPending */ } = useMutation({
     mutationFn: async (newsData: AddNewsForm) => {
       try {
-        const token = window.localStorage.getItem("accessToken");
+        console.log('requestInterceptor : ', requestInterceptor);
         const response = await axios.post(
           "http://localhost:3000/api/v1/news",
           newsData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-            },
-          }
         );
         return response.data;
       } catch (error: any) {

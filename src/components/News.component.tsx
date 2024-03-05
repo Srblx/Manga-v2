@@ -1,68 +1,81 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { NewsModel } from "../interfaces/NewsModel";
+import { LikesModel, NewsModel } from "../interfaces/NewsModel";
+import { CardNews } from "./CardNews.component";
+import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
-import {
-  StyledDivContentOneItem,
-  StyledH1,
-  StyledImgNews,
-  StyledStackContentDescription,
-  StyledStackContentItem,
-} from "../components/StyledBaliseMui/StyledForNews";
-import { format } from 'date-fns';
 
-export function ShowNews(){
-    const [newsData, setNewsData] = useState<NewsModel[]>([]);
+ const StyledH1 = styled("h1")({
+  width: "100%",
+  background: "gray",
+  marginTop: "4.5rem",
+  textAlign: "center",
+  padding: "2rem 0",
+});
 
-    useEffect(() => {
-      const fetchNews = async () => {
-        try {
-          const response = await axios.get("http://localhost:3000/api/v1/news");
-          console.log("response.data.data : ", response.data[0]);
-          setNewsData(response.data);
-          console.log("setNewsData : ", setNewsData);
-        } catch (error: any) {
-          throw new Error("Fetch news error" + error.message);
-        }
-      };
-  
-      fetchNews();
-    }, []);
-  
+ const StyledStackContentItem = styled(Stack)({
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  background: "#ffffffb5",
+});
+
+
+export function ShowNews() {
+  const [newsData, setNewsData] = useState<NewsModel[]>([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/v1/news");
+        setNewsData(response.data);
+        return response.data; //! Pas obligatoire??
+      } catch (error: any) {
+        throw new Error("Fetch news error" + error.message);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  const [islike, setIsLike] = useState<boolean>(false);
+  const [totalLikes, setTotalLikes] = useState<number>(0);
+  const [allLikes, setAllLikes] = useState<LikesModel[]>([]);
+
+  useEffect(() => {
+    const fetchLikes = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/v1/likes");
+        const newsLikes = response.data
+          setTotalLikes(newsLikes.length);
+          setAllLikes(response.data);
+          if (newsLikes.find((like: LikesModel) => like.user._id === localStorage.getItem("userID"))) {
+            setIsLike(true);
+          }
+      } catch (error) {
+        throw new Error("Fetch like error");
+      }
+    };
+    fetchLikes();
+  }, []);
+
     return (
       <>
-        <StyledH1>
-          Welcome to News page ! 
-        </StyledH1>
+        <StyledH1>Welcome to News page ! </StyledH1>
         {
-          <StyledStackContentItem>
-            {newsData?.map((newsItem, index) => (
-              <StyledDivContentOneItem key={index}>
-                <StyledImgNews src={newsItem.imageUrl} alt="News"/>
-                <h2>{newsItem.title}</h2>
-                <StyledStackContentDescription sx={{}}>
-                  <p>{newsItem.content}</p>
-                </StyledStackContentDescription>
-                <Stack
-                  direction="row"
-                  sx={{
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <p>
-                    <strong style={{ color: "blue" }}>
-                    {format(new Date(newsItem.createdAt), "dd/MM/yyyy")}
-                    </strong>
-                  </p>
-                  <p>
-                    <strong>{`${newsItem.user.firstname} ${newsItem.user.lastname}`}</strong>
-                  </p>
-                </Stack>
-              </StyledDivContentOneItem>
+          <StyledStackContentItem direction="row" flexWrap="wrap" sx={{background: "red"}}>
+            {newsData?.map((newsModel) => (
+              <CardNews
+                key={newsModel._id}
+                newsModel={newsModel}
+                likes={allLikes.filter((like) => {
+                  return like.news._id === newsModel._id
+                })}
+              />
             ))}
           </StyledStackContentItem>
         }
       </>
     );
-}
+  };
+

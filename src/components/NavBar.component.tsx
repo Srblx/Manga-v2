@@ -1,11 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-  StyledBoxForNavBar,
-  StyledDivForTabletInCartIcon,
-  StyledForLinkInNav,
-  StyledTypographyForNavBar,
-} from "./StyledBaliseMui/StyledForNavBarMui";
-import {
   AppBar,
   Button,
   Toolbar,
@@ -13,6 +7,46 @@ import {
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { DrawerCart } from "./DrawerCart.component";
 import PositionedMenu from "./LoginSignUp/MenuUser.component";
+import { Box, Typography, styled } from "@mui/material";
+import { Link } from "react-router-dom";
+
+ const StyledBoxForNavBar = styled(Box)({
+    flexGrow: 1,
+    position: "fixed",
+    width: "100%",
+    height: "80px",
+    zIndex: "9999",
+    transition: "top 0.3s",
+});
+
+ const StyledTypographyForNavBar = styled(Typography)({
+    flexGrow: 1, 
+    color: "white", 
+    fontWeight: "bold",
+});
+
+ const StyledDivForTabletInCartIcon = styled("div")({
+    background: "#d34040",
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+    width: "1.5rem",
+    height: "1.5rem",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    transform: "translate(20%, 30%)",
+    fontWeight: "bold"
+});
+
+
+ const StyledForLinkInNav = styled(Link)({
+    textDecoration: "none", 
+    color: "white"
+});
+
 
 export default function NavBar() {
   const [previousScrollPosition, setPreviousScrollPosition] = useState(
@@ -50,8 +84,6 @@ export default function NavBar() {
   const handleCloseCart = () => {
     setIsOpen(false);
   };
-
-  const accessToken = window.localStorage.getItem("accessToken");
   
   return (
     <StyledBoxForNavBar sx={{ ...(visible ? { top: 0 } : { top: "-80px" }) }}>
@@ -67,7 +99,7 @@ export default function NavBar() {
           <StyledTypographyForNavBar variant="h6">
             <StyledForLinkInNav to={`news`}>News</StyledForLinkInNav>
           </StyledTypographyForNavBar>
-          {accessToken && <StyledTypographyForNavBar variant="h6">
+          {/* accessToken && */ <StyledTypographyForNavBar variant="h6">
             <StyledForLinkInNav to={`addNews`}>Add News</StyledForLinkInNav>
           </StyledTypographyForNavBar>}
           <Button

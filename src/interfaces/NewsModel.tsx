@@ -4,10 +4,12 @@ export interface NewsModel {
     content: string;
     imageUrl: string;
     createdAt: string;
+    // isLiked: boolean;
     user: {
       firstname: string;
       lastname: string;
     };
+    isliked: LikesModel
   }
 
   export interface AddNewsForm {
@@ -15,3 +17,15 @@ export interface NewsModel {
     content?: string; 
     imageUrl?: string;
   }
+
+  export interface LikesModel {
+    _id: string;
+    user: UserModel;
+    news: NewsModel;
+  }
+
+  interface UserModel {
+    _id: string;
+  }
+
+  

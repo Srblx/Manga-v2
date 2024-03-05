@@ -3,14 +3,6 @@ import { useInView } from "react-intersection-observer";
 import { debounceTime, distinctUntilChanged, fromEvent, map } from "rxjs";
 import { MangaModelData } from "../interfaces/MangaModelInterface";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import {
-  StyledBoxContentSearchBar,
-  StyledDivContentBtnScrollToTop,
-  StyledDivContentMangaCard,
-  StyledStackContentBoxSearchBar,
-  StyledStackForAllCardManga,
-  Styledh1ForListManga,
-} from "../components/StyledBaliseMui/StyledForListManga";
 import { MangaCard } from "../components/CardManga.component";
 import SearchIcon from "@mui/icons-material/Search";
 import { TextField } from "@mui/material";
@@ -18,6 +10,56 @@ import { ErrorDisplayManga } from "../components/ErrorDisplayMangaList.component
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
 import ScrollToTopButton from "../components/BtnScrollTop.component";
 import axios from "axios";
+import { requestInterceptor } from "../components/LoginSignUp/LoginForm.component";
+import { Box, Stack, styled } from "@mui/material";
+
+ const StyledStackForAllCardManga = styled(Stack)({
+  justifyContent: "center",
+  margin: "15px",
+  padding: "10px 10px",
+});
+
+ const StyledDivContentMangaCard = styled("div")({
+  border: "solid 4px white",
+  margin: "2px",
+  borderRadius: "10px",
+});
+
+ const Styledh1ForListManga = styled("h1")({
+  marginTop: "4.5rem",
+  color: "black",
+  paddingTop: "1rem",
+  background: "white",
+  width: "100%",
+  textAlign: "center",
+});
+
+ const StyledStackContentBoxSearchBar = styled(Stack)({
+  background: "gray",
+  padding: ".5rem",
+  width: "50%",
+  display: "contents",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+ const StyledBoxContentSearchBar = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  margin: "2rem auto ",
+  alignItems: "center",
+  background: "white",
+  paddingLeft: ".5rem",
+  borderRadius: "15px",
+  width: "50%",
+});
+
+ const StyledDivContentBtnScrollToTop = styled("div")({
+  position: "fixed",
+  bottom: "2rem",
+  right: "1rem",
+});
+
 
 export function ListManga() {
   const { ref, inView } = useInView();
@@ -55,16 +97,19 @@ export function ListManga() {
         subscription.unsubscribe();
       };
     }
-  }, [inputRef.current]);
+  }, []);
 
-  
+
+  axios.interceptors.request.eject(requestInterceptor);
 
   const fetchManga = async (
     { pageParam }: { pageParam: number },
     searchValue: string
   ): Promise<{ data: MangaModelData; pagination: any }> => {
-    const apiUrl = `https://api.jikan.moe/v4/manga?sfw=true&page=${pageParam}${searchValue ? `&q=${searchValue}` : ""}`;
-  
+    const apiUrl = `https://api.jikan.moe/v4/manga?sfw=true&page=${pageParam}${
+      searchValue ? `&q=${searchValue}` : ""
+    }`;
+
     try {
       const response = await axios.get(apiUrl);
       return response.data;
@@ -72,6 +117,8 @@ export function ListManga() {
       throw new Error(networkError);
     }
   };
+
+  axios.interceptors.request.use((requestInterceptor) => requestInterceptor);
 
   const {
     data: dataFromQuery,
