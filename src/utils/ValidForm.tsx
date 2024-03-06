@@ -63,17 +63,18 @@ export const validateFormLogin = (
   return true;
 };
 
-
 export const validateFormAddNews = (
-  formData: AddNewsForm, 
+  formData: AddNewsForm,
   setError: Dispatch<SetStateAction<string>>
 ) => {
-  if(!formData.content || !formData.title || !formData.imageUrl){
+  if (!formData.content || !formData.title || !formData.imageUrl) {
     setError("Please fill in all fields");
     return false;
-  } else if(formData.title.length > 150 || formData.content.length > 800){
-    setError("The title must not exceed 150 characters and the description must not exceed 800 characters.");
+  } else if (formData.title.length > 150 || formData.content.length > 800) {
+    setError(
+      "The title must not exceed 150 characters and the description must not exceed 800 characters."
+    );
     return false;
   }
-  return true; 
-}
+  return true;
+};

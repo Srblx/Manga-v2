@@ -3,8 +3,8 @@ import { MangaModelData } from "../interfaces/MangaModelInterface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type ShoppingProviderProps = {
-    children: ReactNode;
-  };
+  children: ReactNode;
+};
 
 export type ItemsInCartClient = {
   id: number;
@@ -114,4 +114,3 @@ export function ShoppingCartProvider({ children }: ShoppingProviderProps) {
     </ShoppingCarContext.Provider>
   );
 }
-

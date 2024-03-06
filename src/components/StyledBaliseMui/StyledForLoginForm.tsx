@@ -38,7 +38,7 @@ export const StyledStackForm = styled(Stack)({
   borderRadius: "15px",
   padding: "2rem 0",
   width: "30%",
-  border: "2px solid white "
+  border: "2px solid white ",
 });
 
 export const StyledStackContentAllForm = styled(Stack)({
@@ -50,6 +50,6 @@ export const StyledStackContentAllForm = styled(Stack)({
 export const StyledLink = styled(Link)({
   color: "#0B51E7",
   "&:visited": {
-    textDecoration: "none", 
+    textDecoration: "none",
   },
 });

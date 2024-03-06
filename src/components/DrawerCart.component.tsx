@@ -10,8 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-
- const StyledParagrapheContentTotalCart = styled("p")({
+const StyledParagrapheContentTotalCart = styled("p")({
   color: "white",
   fontSize: "2rem",
   fontWeight: "bold",
@@ -19,14 +18,14 @@ import axios from "axios";
   marginBottom: "2rem",
 });
 
- const StyledStackForCardContentItemInCart = styled(Stack)({
+const StyledStackForCardContentItemInCart = styled(Stack)({
   background: " #f4e2e2",
   padding: ".2rem",
   borderRadius: "10px",
   alignItems: "center",
 });
 
- const StyledIconBtnCloseCart = styled(IconButton)({
+const StyledIconBtnCloseCart = styled(IconButton)({
   color: "white",
   background: "red",
   width: "100%",
@@ -34,16 +33,16 @@ import axios from "axios";
   padding: "65px 0px 5px 0px",
 });
 
- const StyledIconButton = styled(IconButton)({
-    alignItems: "flex-start",
-    background: "black",
-    border: "2px solid white",
-    borderRadius: "10px",
-    width: "100%",
-    "&:hover": {
-      background: "rgb(39, 39, 39);",
-    },
-  });
+const StyledIconButton = styled(IconButton)({
+  alignItems: "flex-start",
+  background: "black",
+  border: "2px solid white",
+  borderRadius: "10px",
+  width: "100%",
+  "&:hover": {
+    background: "rgb(39, 39, 39);",
+  },
+});
 
 type ShoppingCartProps = {
   openCart: boolean;
@@ -64,10 +63,12 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
   const fetchCartItemsInfo = async () => {
     try {
       const axiosRequests = ItemsInCartClient.map(async (item) => {
-        const response = await axios.get(`https://api.jikan.moe/v4/manga/${item.id}`);
+        const response = await axios.get(
+          `https://api.jikan.moe/v4/manga/${item.id}`
+        );
         return response.data.data as MangaModelData;
       });
-  
+
       const cartItemsInfoResponses = await Promise.all(axiosRequests);
       return cartItemsInfoResponses.filter(Boolean);
     } catch (error) {
@@ -101,14 +102,13 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
         "& .css-1160xiw-MuiPaper-root-MuiDrawer-paper": {
           backgroundColor: "rgb(39, 39, 39)",
         },
-
       }}
     >
       <Stack
         spacing={2}
         sx={{
           padding: "1rem",
-          background: "rgb(39,39,39)"
+          background: "rgb(39,39,39)",
         }}
       >
         <StyledIconBtnCloseCart
@@ -182,7 +182,14 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
                 </StyledIconButton>
                 <p>Total : {formatCurrency(total)}</p>
               </Stack>
-              <IconButton onClick={() => removeFormCart(item.manga?.mal_id!)} sx={{background: "red", height: "100%", borderRadius: "0 10px 10px 0",}}>
+              <IconButton
+                onClick={() => removeFormCart(item.manga?.mal_id!)}
+                sx={{
+                  background: "red",
+                  height: "100%",
+                  borderRadius: "0 10px 10px 0",
+                }}
+              >
                 <DeleteIcon sx={{ color: "white" }} />
               </IconButton>
             </StyledStackForCardContentItemInCart>

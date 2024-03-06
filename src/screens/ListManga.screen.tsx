@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { debounceTime, distinctUntilChanged, fromEvent, map } from "rxjs";
 import { MangaModelData } from "../interfaces/MangaModelInterface";
@@ -10,22 +10,23 @@ import { ErrorDisplayManga } from "../components/ErrorDisplayMangaList.component
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
 import ScrollToTopButton from "../components/BtnScrollTop.component";
 import axios from "axios";
-import { requestInterceptor } from "../components/LoginSignUp/LoginForm.component";
 import { Box, Stack, styled } from "@mui/material";
+import UserContext from "../context/UserContext";
 
- const StyledStackForAllCardManga = styled(Stack)({
+
+const StyledStackForAllCardManga = styled(Stack)({
   justifyContent: "center",
   margin: "15px",
   padding: "10px 10px",
 });
 
- const StyledDivContentMangaCard = styled("div")({
+const StyledDivContentMangaCard = styled("div")({
   border: "solid 4px white",
   margin: "2px",
   borderRadius: "10px",
 });
 
- const Styledh1ForListManga = styled("h1")({
+const Styledh1ForListManga = styled("h1")({
   marginTop: "4.5rem",
   color: "black",
   paddingTop: "1rem",
@@ -34,7 +35,7 @@ import { Box, Stack, styled } from "@mui/material";
   textAlign: "center",
 });
 
- const StyledStackContentBoxSearchBar = styled(Stack)({
+const StyledStackContentBoxSearchBar = styled(Stack)({
   background: "gray",
   padding: ".5rem",
   width: "50%",
@@ -43,7 +44,7 @@ import { Box, Stack, styled } from "@mui/material";
   alignItems: "center",
 });
 
- const StyledBoxContentSearchBar = styled(Box)({
+const StyledBoxContentSearchBar = styled(Box)({
   display: "flex",
   justifyContent: "center",
   margin: "2rem auto ",
@@ -54,12 +55,11 @@ import { Box, Stack, styled } from "@mui/material";
   width: "50%",
 });
 
- const StyledDivContentBtnScrollToTop = styled("div")({
+const StyledDivContentBtnScrollToTop = styled("div")({
   position: "fixed",
   bottom: "2rem",
   right: "1rem",
 });
-
 
 export function ListManga() {
   const { ref, inView } = useInView();
@@ -68,16 +68,8 @@ export function ListManga() {
   const [searchValue, setSearchValue] = useState("");
   const queryKey = searchValue ? ["manga", searchValue] : ["manga"];
   const inputRef = useRef<HTMLInputElement>(null);
-  const [userName, setUserName] = useState("");
+  const { user } = useContext(UserContext);
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const userData = JSON.parse(user);
-      const { firstname, lastname } = userData;
-      setUserName(`${firstname} ${lastname} `);
-    }
-  }, []);
 
   useEffect(() => {
     const inputElement = inputRef.current;
@@ -100,8 +92,6 @@ export function ListManga() {
   }, []);
 
 
-  axios.interceptors.request.eject(requestInterceptor);
-
   const fetchManga = async (
     { pageParam }: { pageParam: number },
     searchValue: string
@@ -117,8 +107,6 @@ export function ListManga() {
       throw new Error(networkError);
     }
   };
-
-  axios.interceptors.request.use((requestInterceptor) => requestInterceptor);
 
   const {
     data: dataFromQuery,
@@ -159,7 +147,7 @@ export function ListManga() {
                 key={manga.mal_id}
                 manga={manga}
                 price={19.98}
-                isAuthenticated={userName !== ""}
+                isAuthenticated={!!user}
               />
             </StyledDivContentMangaCard>
           );
@@ -171,7 +159,7 @@ export function ListManga() {
   return (
     <>
       <Styledh1ForListManga>
-        <span style={{ color: "rgb(68, 68, 68)" }}>Welcom {userName}</span>
+        <span style={{ color: "rgb(68, 68, 68)" }}>Welcom {user?.firstname}</span>
         <br />
         TO THE MANGA LIBRARY
       </Styledh1ForListManga>

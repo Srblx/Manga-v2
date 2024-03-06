@@ -1,8 +1,10 @@
 import Stack from "@mui/material/Stack";
-import { LabelCustom } from "../UnderComponents/LabelCustom.component";
-import TextFieldCustom, { TextFielCustomPassword } from "../UnderComponents/TextFieldCustom.component";
+import { LabelCustom } from "../components/UnderComponents/LabelCustom.component";
+import TextFieldCustom, {
+  TextFielCustomPassword,
+} from "../components/UnderComponents/TextFieldCustom.component";
 import Grid from "@mui/material/Grid";
-import { ButtonCustom } from "../UnderComponents/BtnCustom.component";
+import { ButtonCustom } from "../components/UnderComponents/BtnCustom.component";
 import {
   StyledH1TitleLoginForm,
   StyledLink,
@@ -10,20 +12,23 @@ import {
   StyledSpanIfNotAccountGoToSignUp,
   StyledStackContentAllForm,
   StyledStackForm,
-} from "../StyledBaliseMui/StyledForLoginForm";
-import { useState } from "react";
-import {
-  CreateUserDto,
-  FormSignUpData,
-} from "../../interfaces/LoginSignUpInterface";
-import { validateFormSingUp } from "../../utils/ValidForm";
-import { RequiredField } from "../UnderComponents/RequireField.component";
+} from "../components/StyledBaliseMui/StyledForLoginForm";
+import { useContext, useState } from "react";
+import { FormLoginData } from "../interfaces/LoginSignUpInterface";
+import { validateFormLogin } from "../utils/ValidForm";
+import { RequiredField } from "../components/UnderComponents/RequireField.component";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import UserContext from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
-export function SignUpForm() {
-  const [formData, setFormData] = useState<FormSignUpData>({});
+
+
+export function LoginForm() {
+  const [formData, setFormData] = useState<FormLoginData>({});
   const [error, setError] = useState<string>("");
+  const {  setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,26 +38,25 @@ export function SignUpForm() {
     }));
   };
 
-  
   const handleError = (error: Error) => {
-    setError(error.message || "An error occurred during registration.");
+    setError(error.message || "An error occurred during login.");
   };
 
-  const handleSuccess = (/* data: any */) => {
+  const handleSuccess = (data: any) => {
     setError("");
-    window.location.href = "/login";
+    localStorage.setItem("accessToken", data.accessToken);
+    setUser(data.user)
+    setTimeout(() => {
+      localStorage.removeItem("accessToken");
+    }, 3600000); //? 1 hour expiration
+      navigate("/");
   };
 
-  const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
-    const { ...userData } = formData;
-    return { ...userData, role: "USER" };
-  };
-
-  const { mutate: signUpUser, isPending } = useMutation({
-    mutationFn: async (userData: CreateUserDto) => {
+  const { mutate: loginUser, isPending } = useMutation({
+    mutationFn: async (userData: FormLoginData) => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/v1/auth/register/",
+          "http://localhost:3000/api/v1/auth/login",
           userData,
           {
             headers: {
@@ -62,7 +66,7 @@ export function SignUpForm() {
         );
         return response.data;
       } catch (error: any) {
-        throw new Error("Registration error: " + error.message);
+        throw new Error("Login error: " + error.message);
       }
     },
     onError: handleError,
@@ -70,10 +74,9 @@ export function SignUpForm() {
   });
 
   const handleSubmit = async () => {
-    const isValid = validateFormSingUp(formData, setError);
+    const isValid = validateFormLogin(formData, setError);
     if (isValid) {
-      const userData = transformFormDataToDto(formData);
-      await signUpUser(userData);
+      await loginUser(formData);
       setError("");
     }
   };
@@ -92,29 +95,7 @@ export function SignUpForm() {
             direction="column"
             alignItems="start"
           >
-            <StyledH1TitleLoginForm>Sign up</StyledH1TitleLoginForm>
-            <LabelCustom margin="2em 0 .1em 0">
-              Lastname <RequiredField />
-            </LabelCustom>
-            <TextFieldCustom
-              name="lastname"
-              value={formData.lastname}
-              onChange={handleChange}
-              id="outlined-basic"
-              variant="outlined"
-              placeholder="Lastname"
-            />
-            <LabelCustom margin="2em 0 .1em 0">
-              Firstname <RequiredField />
-            </LabelCustom>
-            <TextFieldCustom
-              value={formData.firstname}
-              onChange={handleChange}
-              name="firstname"
-              id="outlined-basic"
-              variant="outlined"
-              placeholder="Firstname"
-            />
+            <StyledH1TitleLoginForm>Login</StyledH1TitleLoginForm>
             <LabelCustom margin="2em 0 .1em 0">
               E-Mail address <RequiredField />
             </LabelCustom>
@@ -144,17 +125,6 @@ export function SignUpForm() {
                 placeholder="Password"
               />
             </Grid>
-            <LabelCustom margin="2em 0 .1em 0">
-              Confirm password <RequiredField />
-            </LabelCustom>
-            <TextFielCustomPassword
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              name="confirmPassword"
-              id="outlined-basic"
-              variant="outlined"
-              placeholder="Confirm password"
-            />
           </Stack>
           {error && (
             <div
@@ -179,12 +149,12 @@ export function SignUpForm() {
             onClick={handleSubmit}
             disabled={isPending}
           >
-            {isPending ? "Signing Up..." : "Sign Up"}
+            {isPending ? "Logining..." : "Login"}
           </ButtonCustom>
           <StyledParagrapheIfNotAccount>
-            You already have an account ?{" "}
+            You don't have an account ?{" "}
             <StyledSpanIfNotAccountGoToSignUp>
-              <StyledLink to={`/login`}>Connect !</StyledLink>
+              <StyledLink to={`/signup`}>Sign up !</StyledLink>
             </StyledSpanIfNotAccountGoToSignUp>
           </StyledParagrapheIfNotAccount>
         </form>

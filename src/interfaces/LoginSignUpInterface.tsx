@@ -18,3 +18,13 @@ export interface FormLoginData {
   email?: string;
   password?: string;
 }
+
+
+export interface User {
+  id: string;
+  token?: string
+  lastname?: string;
+  firstname?: string;
+  email?: string;
+  role: string;
+}

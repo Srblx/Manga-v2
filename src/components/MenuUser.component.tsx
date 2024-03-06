@@ -4,7 +4,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -24,6 +24,7 @@ export default function PositionedMenu({
 }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openModal, setOpenModal] = React.useState(false);
+  const navigate = useNavigate();
 
   const open = Boolean(anchorEl);
 
@@ -43,7 +44,7 @@ export default function PositionedMenu({
     localStorage.clear();
     handleClose();
     window.location.reload();
-    window.location.href = "/";
+    navigate('/');
   };
 
   return (

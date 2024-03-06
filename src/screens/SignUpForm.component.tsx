@@ -1,8 +1,10 @@
 import Stack from "@mui/material/Stack";
-import { LabelCustom } from "../UnderComponents/LabelCustom.component";
-import TextFieldCustom, { TextFielCustomPassword } from "../UnderComponents/TextFieldCustom.component";
+import { LabelCustom } from "../components/UnderComponents/LabelCustom.component";
+import TextFieldCustom, {
+  TextFielCustomPassword,
+} from "../components/UnderComponents/TextFieldCustom.component";
 import Grid from "@mui/material/Grid";
-import { ButtonCustom } from "../UnderComponents/BtnCustom.component";
+import { ButtonCustom } from "../components/UnderComponents/BtnCustom.component";
 import {
   StyledH1TitleLoginForm,
   StyledLink,
@@ -10,28 +12,22 @@ import {
   StyledSpanIfNotAccountGoToSignUp,
   StyledStackContentAllForm,
   StyledStackForm,
-} from "../StyledBaliseMui/StyledForLoginForm";
+} from "../components/StyledBaliseMui/StyledForLoginForm";
 import { useState } from "react";
-import { FormLoginData } from "../../interfaces/LoginSignUpInterface";
-import { validateFormLogin } from "../../utils/ValidForm";
-import { RequiredField } from "../UnderComponents/RequireField.component";
+import {
+  CreateUserDto,
+  FormSignUpData,
+} from "../interfaces/LoginSignUpInterface";
+import { validateFormSingUp } from "../utils/ValidForm";
+import { RequiredField } from "../components/UnderComponents/RequireField.component";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export const requestInterceptor = axios.interceptors.request.use(
-  config => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem("accessToken")}`;
-    return config; 
-  }, 
-  error => {
-    console.error(error)
-    return Promise.reject(error)
-  }
-  );
-
-export function LoginForm() {
-  const [formData, setFormData] = useState<FormLoginData>({});
+export function SignUpForm() {
+  const [formData, setFormData] = useState<FormSignUpData>({});
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,33 +37,25 @@ export function LoginForm() {
     }));
   };
 
-  
   const handleError = (error: Error) => {
-    setError(error.message || "An error occurred during login.");
+    setError(error.message || "An error occurred during registration.");
   };
 
-  const handleSuccess = (data: any) => {
+  const handleSuccess = () => {
     setError("");
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    localStorage.setItem("userID", data.user.id);
-    localStorage.setItem("userRole", JSON.stringify(data.user.role))
-    console.log('localStorage : ', localStorage.getItem("userID"));
-    console.log('localStorage.getItem(data.user.id) : ', localStorage.getItem("userID"));
-    setTimeout(() => {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("user");
-    }, 3600000); //? 1 hour expiration
-    window.location.href = "/";
+    navigate("/login");
   };
 
+  const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
+    const { ...userData } = formData;
+    return { ...userData, role: "USER" };
+  };
 
-
-  const { mutate: loginUser, isPending } = useMutation({
-    mutationFn: async (userData: FormLoginData) => {
+  const { mutate: signUpUser, isPending } = useMutation({
+    mutationFn: async (userData: CreateUserDto) => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/v1/auth/login",
+          "http://localhost:3000/api/v1/auth/register/",
           userData,
           {
             headers: {
@@ -77,7 +65,7 @@ export function LoginForm() {
         );
         return response.data;
       } catch (error: any) {
-        throw new Error("Login error: " + error.message);
+        throw new Error("Registration error: " + error.message);
       }
     },
     onError: handleError,
@@ -85,9 +73,10 @@ export function LoginForm() {
   });
 
   const handleSubmit = async () => {
-    const isValid = validateFormLogin(formData, setError);
+    const isValid = validateFormSingUp(formData, setError);
     if (isValid) {
-      await loginUser(formData);
+      const userData = transformFormDataToDto(formData);
+      await signUpUser(userData);
       setError("");
     }
   };
@@ -106,7 +95,29 @@ export function LoginForm() {
             direction="column"
             alignItems="start"
           >
-            <StyledH1TitleLoginForm>Login</StyledH1TitleLoginForm>
+            <StyledH1TitleLoginForm>Sign up</StyledH1TitleLoginForm>
+            <LabelCustom margin="2em 0 .1em 0">
+              Lastname <RequiredField />
+            </LabelCustom>
+            <TextFieldCustom
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              id="outlined-basic"
+              variant="outlined"
+              placeholder="Lastname"
+            />
+            <LabelCustom margin="2em 0 .1em 0">
+              Firstname <RequiredField />
+            </LabelCustom>
+            <TextFieldCustom
+              value={formData.firstname}
+              onChange={handleChange}
+              name="firstname"
+              id="outlined-basic"
+              variant="outlined"
+              placeholder="Firstname"
+            />
             <LabelCustom margin="2em 0 .1em 0">
               E-Mail address <RequiredField />
             </LabelCustom>
@@ -136,6 +147,17 @@ export function LoginForm() {
                 placeholder="Password"
               />
             </Grid>
+            <LabelCustom margin="2em 0 .1em 0">
+              Confirm password <RequiredField />
+            </LabelCustom>
+            <TextFielCustomPassword
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              name="confirmPassword"
+              id="outlined-basic"
+              variant="outlined"
+              placeholder="Confirm password"
+            />
           </Stack>
           {error && (
             <div
@@ -160,12 +182,12 @@ export function LoginForm() {
             onClick={handleSubmit}
             disabled={isPending}
           >
-            {isPending ? "Logining..." : "Login"}
+            {isPending ? "Signing Up..." : "Sign Up"}
           </ButtonCustom>
           <StyledParagrapheIfNotAccount>
-            You don't have an account ?{" "}
+            You already have an account ?{" "}
             <StyledSpanIfNotAccountGoToSignUp>
-              <StyledLink to={`/signup`}>Sign up !</StyledLink>
+              <StyledLink to={`/login`}>Connect !</StyledLink>
             </StyledSpanIfNotAccountGoToSignUp>
           </StyledParagrapheIfNotAccount>
         </form>

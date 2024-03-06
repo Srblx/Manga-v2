@@ -5,7 +5,9 @@ interface PageNumberContextType {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const PageNumberContext = createContext<PageNumberContextType | null>(null);
+export const PageNumberContext = createContext<PageNumberContextType | null>(
+  null
+);
 
 export const PageNumberProvider = ({ children }: { children: ReactNode }) => {
   const [page, setPage] = useState(1);

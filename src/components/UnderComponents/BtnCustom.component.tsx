@@ -2,7 +2,7 @@ import { Button, Stack } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 export function ButtonCustom(props: any) {
-  //! faire plusieur props avec chacune leur type type SxProps de mui 
+  //! faire plusieur props avec chacune leur type type SxProps de mui
   const capitalizeFirstLetter = (text: string) => {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   };
@@ -11,7 +11,9 @@ export function ButtonCustom(props: any) {
     <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
       <Button
         onClick={props.onClick}
-        startIcon={props.useLinkedInIcon ? <LinkedInIcon fontSize="large"/> : null}
+        startIcon={
+          props.useLinkedInIcon ? <LinkedInIcon fontSize="large" /> : null
+        }
         sx={{
           background: props.background || "black",
           fontFamily: "Youtube Sans",

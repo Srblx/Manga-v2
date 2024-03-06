@@ -1,5 +1,3 @@
-export function RequiredField(){
-    return (
-        <span style={{color: "red"}}>*</span>
-    );
+export function RequiredField() {
+  return <span style={{ color: "red" }}>*</span>;
 }
