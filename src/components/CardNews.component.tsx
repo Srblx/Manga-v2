@@ -1,13 +1,9 @@
 import {
-  Box,
-  Button,
   IconButton,
-  Modal,
   Stack,
-  Typography,
   styled,
 } from "@mui/material";
-import { LikesModel, NewsModel } from "../interfaces/NewsModel";
+import { LikesModel, NewsModel } from "../interfaces/NewsModel.interface";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { format } from "date-fns";
@@ -17,6 +13,8 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import ApiAxios from "../utils/axios.api";
+import { AlertAuthorizeDeleteNews } from "./UnderComponents/BoxAlertMessage.component";
+import { ADMIN } from "../utils/constant.utils";
 
 const StyledDivContentOneItem = styled("div")({
   background: "white",
@@ -26,6 +24,7 @@ const StyledDivContentOneItem = styled("div")({
   borderRadius: "10px",
   textAlign: "center",
   width: "40%",
+  height: "100%",
 });
 
 const StyledImgNews = styled("img")({
@@ -33,50 +32,73 @@ const StyledImgNews = styled("img")({
   height: "auto",
   borderRadius: "5px",
   maxHeight: "250px",
+  overflow: "hidden", 
 });
 
 const StyledStackContentDescription = styled(Stack)({
   justifyContent: "center",
   alignItems: "center",
-  margin: "1rem 0",
+  margin: "1rem 0", 
 });
+
+// const StyledBoxForModalConfirmDelete = styled(Box)({
+//   left: "50%",
+//   boxShadow: 24,
+//   position: "absolute",
+//   top: "50%",
+//   transform: "translate(-50%, -50%)",
+//   bgcolor: "white",
+//   p: 4,
+//   textAlign: "center",
+// });
+
+// const StyledBoxForModalConfirmDelete = styled(Box)({
+//   position: "absolute",
+//   boxShadow: 24,
+//   left: "50%",
+//   top: "50%",
+//   transform: "translate(-50%, -50%)",
+//   bgcolor: "white",
+//   p: 4,
+//   textAlign: "center",
+// });
 
 type NewsItemProps = {
   newsModel: NewsModel;
   likes: LikesModel[];
   onDelete: (newsId: string) => void;
+  // onEdit: (news: NewsModel) => void
 };
 
-export function CardNews({ newsModel, likes, onDelete }: NewsItemProps) {
+export function CardNews({ newsModel, likes, onDelete/* , onEdit */ }: NewsItemProps) {
   const { user } = useContext(UserContext);
   const [likeByMe, setLikeByMe] = useState<LikesModel | undefined>(
     likes.find((like) => like.user.id === user?.id)
   );
-  const [totalLikes, setTotalLikes] = useState<number>(likes.length);
+  const [allLikesForOneNews, setAllLikesForOneNews] = useState<number>(likes.length);
+  // console.log('likes : ' + newsModel.title, likes);
+  // console.log('allLikesForOneNews : ', allLikesForOneNews);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(user?.role === ADMIN);
 
+  
   const onClickForLike = async () => {
     try {
-      // if (!user?.token) {
-      //   alert("Please log in to like a news");
-      //   return;
-      // }
       if (!likeByMe) {
-        const response = await ApiAxios.post(
-          "likes",
-          {
-            news: newsModel.id,
-            user: user?.id,
-          }
-        );
+        const response = await ApiAxios.post("likes", {
+          news: newsModel.id,
+          user: user?.id,
+        });
         setLikeByMe(response.data._id);
-        setTotalLikes(totalLikes + 1);
+        // console.log('likeByMe : ', response.data._id);
+        setAllLikesForOneNews(previousState => previousState + 1);
       } else {
         const likedId = likeByMe;
+        // console.log('likedId : ', likedId);
         await ApiAxios.delete(`likes/${likedId}`);
         setLikeByMe(undefined);
-        setTotalLikes(totalLikes - 1);
+        setAllLikesForOneNews(previousState => previousState - 1);
       }
     } catch (error) {
       console.error("Erreur lors de la création/suppression du like", error);
@@ -96,8 +118,9 @@ export function CardNews({ newsModel, likes, onDelete }: NewsItemProps) {
   };
 
   const handleOnClickEdit = () => {
-    navigate("/editNews")
-  }
+    navigate(`/editNews`);
+  };
+// console.log('allLikes : ', likes);
   return (
     <>
       <StyledDivContentOneItem>
@@ -106,17 +129,18 @@ export function CardNews({ newsModel, likes, onDelete }: NewsItemProps) {
           justifyContent={"space-between"}
           alignItems={"center"}
         >
-          <IconButton onClick={handleOpenModal}>
-            <DeleteForeverIcon sx={{ color: "red" }} />
-          </IconButton>
+          {isAdmin && (
+            <IconButton onClick={handleOpenModal}>
+              <DeleteForeverIcon sx={{ color: "red" }} />
+            </IconButton>
+          )}
           <IconButton onClick={handleOnClickEdit}>
-            <EditIcon
-              sx={{ color: "blue" }}
-              
-            />
+            <EditIcon sx={{ color: "blue" }} />
           </IconButton>
         </Stack>
-        <StyledImgNews src={newsModel.imageUrl} alt="News"></StyledImgNews>
+        <p>{newsModel.id}</p>
+        <p>{likes.map((like) => like.id)}</p>
+        <StyledImgNews src={newsModel.imageUrl} alt="News"/>
         <Stack
           direction="row"
           sx={{ alignSelf: "center", alignItems: "center" }}
@@ -129,7 +153,7 @@ export function CardNews({ newsModel, likes, onDelete }: NewsItemProps) {
             )}
           </IconButton>
           <p>
-            {totalLikes} {totalLikes > 1 ? "Likes" : "Like"}
+            {allLikesForOneNews} {allLikesForOneNews > 1 ? "Likes" : "Like"}
           </p>
         </Stack>
         <h2>{newsModel.title}</h2>
@@ -152,41 +176,15 @@ export function CardNews({ newsModel, likes, onDelete }: NewsItemProps) {
             <strong>{`${newsModel.user.firstname} ${newsModel.user.lastname}`}</strong>
           </p>
         </Stack>
-        <Modal open={openModal} onClose={handleCloseModal}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              bgcolor: "white",
-              boxShadow: 24,
-              p: 4,
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="h6">
-              <strong>Are you sure you want to delete this news?</strong>
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{ background: "red", margin: ".8rem .5rem" }}
-              onClick={() => {
-                handleDeleteNews();
-                handleCloseModal();
-              }}
-            >
-              Yes
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ background: "blue", margin: ".8rem .5rem" }}
-              onClick={handleCloseModal}
-            >
-              No
-            </Button>
-          </Box>
-        </Modal>
+        {isAdmin && (
+          <AlertAuthorizeDeleteNews
+            openModal={openModal}
+            handleCloseModal={handleCloseModal}
+            handleOpenModal={handleOpenModal}
+            handleDeleteNews={handleDeleteNews}
+            textButton="Yes"
+          />
+        )}
       </StyledDivContentOneItem>
     </>
   );

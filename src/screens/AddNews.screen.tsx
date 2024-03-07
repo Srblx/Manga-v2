@@ -1,14 +1,16 @@
-import { Button, Stack, TextField } from "@mui/material";
-import {  useState } from "react";
-import { AddNewsForm } from "../interfaces/NewsModel";
-import { validateFormAddNews } from "../utils/ValidForm";
+import { Stack, TextField } from "@mui/material";
+import { useState } from "react";
+import { AddNewsForm } from "../interfaces/NewsModel.interface";
+import { validateFormAddNews } from "../utils/ValidForm.utils";
 import { useMutation } from "@tanstack/react-query";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import  ApiAxios  from "../utils/axios.api";
+import ApiAxios from "../utils/axios.api";
+import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
+import { ButtonCustom } from "../components/UnderComponents/BtnCustom.component";
 
 const StyledStackContentTextField = styled(Stack)({
-  marginTop: "10rem",
+  marginTop: "7rem",
   background: "#000000b5",
   justifyContent: "center",
   alignItems: "center",
@@ -38,7 +40,6 @@ export function FormAddNews() {
   const [succes, setSucces] = useState<string>("");
   const navigate = useNavigate();
 
-
   const handleError = (error: Error) => {
     setError(error.message || "An error occurred during login.");
   };
@@ -55,14 +56,11 @@ export function FormAddNews() {
       [name]: value,
     }));
   };
- 
+
   const { mutate: addNews } = useMutation({
     mutationFn: async (newsData: AddNewsForm) => {
       try {
-        const response = await ApiAxios.post(
-          "news",
-          newsData,
-        );
+        const response = await ApiAxios.post("news", newsData);
         return response.data;
       } catch (error: any) {
         throw new Error("Add news: " + error.message);
@@ -83,8 +81,9 @@ export function FormAddNews() {
 
   return (
     <Stack
-      sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+    sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
     >
+      <StyledH1>Add news </StyledH1>
       <StyledStackContentTextField>
         <StyledH1TitleFromAddNews>Add new news</StyledH1TitleFromAddNews>
         {/* <form onSubmit={handleSubmit}> */}
@@ -119,14 +118,13 @@ export function FormAddNews() {
         />
         <p style={{ color: "white" }}>{error}</p>
         <p style={{ color: "white" }}>{succes}</p>
-        <Button
-          variant="contained"
-          color="success"
-          sx={{ marginTop: "2rem" }}
+        <ButtonCustom
+          background={"green"}
+          padding={"1rem"}
           onClick={handleSubmit}
         >
           Register news
-        </Button>
+        </ButtonCustom>
         {/* </form> */}
       </StyledStackContentTextField>
     </Stack>

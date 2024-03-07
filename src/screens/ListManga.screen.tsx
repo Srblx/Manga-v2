@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { debounceTime, distinctUntilChanged, fromEvent, map } from "rxjs";
-import { MangaModelData } from "../interfaces/MangaModelInterface";
+import { MangaModelData } from "../interfaces/MangaModel.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { MangaCard } from "../components/CardManga.component";
 import SearchIcon from "@mui/icons-material/Search";

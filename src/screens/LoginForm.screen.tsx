@@ -12,10 +12,10 @@ import {
   StyledSpanIfNotAccountGoToSignUp,
   StyledStackContentAllForm,
   StyledStackForm,
-} from "../components/StyledBaliseMui/StyledForLoginForm";
+} from "../components/StyledBaliseMui/LoginForm.styled";
 import { useContext, useState } from "react";
-import { FormLoginData } from "../interfaces/LoginSignUpInterface";
-import { validateFormLogin } from "../utils/ValidForm";
+import { FormLoginData } from "../interfaces/LoginSignUp.interface";
+import { validateFormLogin } from "../utils/ValidForm.utils";
 import { RequiredField } from "../components/UnderComponents/RequireField.component";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";

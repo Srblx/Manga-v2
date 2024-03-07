@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useContext, useState } from "react";
-import { MangaModelData } from "../interfaces/MangaModelInterface";
+import { MangaModelData } from "../interfaces/MangaModel.interface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type ShoppingProviderProps = {

@@ -1,18 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { LikesModel, NewsModel } from "../interfaces/NewsModel";
+import { LikesModel, NewsModel } from "../interfaces/NewsModel.interface";
 import { CardNews } from "../components/CardNews.component";
 import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
 import UserContext from "../context/UserContext";
 import ApiAxios from "../utils/axios.api";
-
-const StyledH1 = styled("h1")({
-  width: "100%",
-  background: "gray",
-  marginTop: "4.5rem",
-  textAlign: "center",
-  padding: "2rem 0",
-});
+import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
 
 const StyledStackContentItem = styled(Stack)({
   justifyContent: "center",
@@ -23,18 +16,14 @@ const StyledStackContentItem = styled(Stack)({
 
 export function ShowNews() {
   const [newsData, setNewsData] = useState<NewsModel[]>([]);
-  const [islike, setIsLike] = useState<boolean>(false);
-  const [totalLikes, setTotalLikes] = useState<number>(0);
   const [allLikes, setAllLikes] = useState<LikesModel[]>([]);
-  const { user } = useContext(UserContext);
-  // const [deleteNews, setDeleteNews] = useState([]);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const response = await ApiAxios.get("news");
         setNewsData(response.data);
-        return response.data; //! Pas obligatoire??
+        // return response.data; //! Pas obligatoire??
       } catch (error: any) {
         throw new Error("Fetch news error" + error.message);
       }
@@ -47,17 +36,10 @@ export function ShowNews() {
     const fetchLikes = async () => {
       try {
         const response = await ApiAxios.get("likes");
-        const newsLikes = response.data;
-        setTotalLikes(newsLikes.length);
+        // const newsLikes = response.data;
+        // setTotalLikes(newsLikes.length);
         setAllLikes(response.data);
-        if (
-          newsLikes.find(
-            (like: LikesModel) =>
-              like.user.id === user?.id
-          )
-        ) {
-          setIsLike(true);
-        }
+        // console.log('allLikes : ', allLikes);
       } catch (error) {
         throw new Error("Fetch like error");
       }
@@ -68,15 +50,19 @@ export function ShowNews() {
   const handleDeleteNews = async (newsId: string) => {
     try {
       await ApiAxios.delete(`news/${newsId}`);
-      setNewsData(newsData.filter(news => news.id !== newsId));
+      setNewsData(newsData.filter((news) => news.id !== newsId));
     } catch (error) {
-      console.error('Delete unauthorized', error);
+      console.error("Delete unauthorized", error);
     }
   };
 
+  console.log("allLikes : ", allLikes);
+  // console.log('allLikes.filter : ', allLikes.filter((like) => {
+  //           return like.news.id === like.user.id;
+  //         }));
   return (
     <>
-      <StyledH1>Welcome to News page ! </StyledH1>
+      <StyledH1>News </StyledH1>
       {
         <StyledStackContentItem
           direction="row"
@@ -89,8 +75,11 @@ export function ShowNews() {
               newsModel={newsModel}
               onDelete={handleDeleteNews}
               likes={allLikes.filter((like) => {
-                return like.news.id === like.user.id;
+                return (
+                  like.news.id === newsModel.id
+                ); /* && like.user.id === user?.id; */
               })}
+              // onEdit={}
             />
           ))}
         </StyledStackContentItem>

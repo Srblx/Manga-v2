@@ -2,7 +2,7 @@ import { Box, CircularProgress } from "@mui/material";
 import {
   StyledCustomStackForCircular,
   StyledCustomStackForLoading,
-} from "./StyledBaliseMui/StyledForLoading";
+} from "../components/StyledBaliseMui/Loading.styled";
 
 export function CircularColor() {
   return (

@@ -12,13 +12,13 @@ import {
   StyledSpanIfNotAccountGoToSignUp,
   StyledStackContentAllForm,
   StyledStackForm,
-} from "../components/StyledBaliseMui/StyledForLoginForm";
+} from "../components/StyledBaliseMui/LoginForm.styled";
 import { useState } from "react";
 import {
   CreateUserDto,
   FormSignUpData,
-} from "../interfaces/LoginSignUpInterface";
-import { validateFormSingUp } from "../utils/ValidForm";
+} from "../interfaces/LoginSignUp.interface";
+import { validateFormSingUp } from "../utils/ValidForm.utils";
 import { RequiredField } from "../components/UnderComponents/RequireField.component";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";

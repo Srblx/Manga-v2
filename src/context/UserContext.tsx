@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { User } from "../interfaces/LoginSignUpInterface";
+import { User } from "../interfaces/LoginSignUp.interface";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface UserContextProps {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SingleMangaModelData } from "../interfaces/MangaModelInterface";
+import { SingleMangaModelData } from "../interfaces/MangaModel.interface";
 import MangaCard from "../components/DetailManga.component";
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
 import axios from "axios";

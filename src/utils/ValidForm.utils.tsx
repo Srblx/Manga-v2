@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction } from "react";
 import {
   FormLoginData,
   FormSignUpData,
-} from "../interfaces/LoginSignUpInterface";
-import { AddNewsForm } from "../interfaces/NewsModel";
+} from "../interfaces/LoginSignUp.interface";
+import { AddNewsForm } from "../interfaces/NewsModel.interface";
 
 export const validateFormSingUp = (
   formData: FormSignUpData,

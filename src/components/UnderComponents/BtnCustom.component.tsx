@@ -19,7 +19,7 @@ export function ButtonCustom(props: any) {
           fontFamily: "Youtube Sans",
           boxShadow: props.boxShadow || undefined,
           color: "#FFFFFF",
-          fontSize: "15px",
+          fontSize: "18px",
           textTransform: "math-auto",
           fontWeight: "400",
           borderRadius: "15px",
