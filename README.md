@@ -1,7 +1,6 @@
 
 update dans une modal 
-implementer tanstack dans TOUT le projet //! a verifier !!!!!!!!!!!!!!!!!
-<!-- clean code  -->
+
 
 
 mes question 
