@@ -4,6 +4,7 @@ import { SingleMangaModelData } from "../interfaces/MangaModel.interface";
 import MangaCard from "../components/DetailManga.component";
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
 import axios from "axios";
+import { URL_BASE_MANGA } from "../utils/routeApi.utils";
 
 function SingleManga() {
   const { id } = useParams<{ id: string }>();
@@ -15,7 +16,7 @@ function SingleManga() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://api.jikan.moe/v4/manga/${id}`
+          `${URL_BASE_MANGA + id}`
         );
         const mangaData = response.data.data as SingleMangaModelData;
         setSingleManga(mangaData);
@@ -24,9 +25,7 @@ function SingleManga() {
       }
     };
     fetchData();
-    return () => {
-      /* TODO() */
-    };
+    return () => {};
   }, [id]);
 
   if (!singleManga) {

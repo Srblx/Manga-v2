@@ -4,7 +4,6 @@ export interface NewsModel {
   content: string;
   imageUrl: string;
   createdAt: string;
-  // isLiked: boolean;
   user: {
     firstname: string;
     lastname: string;
@@ -26,4 +25,12 @@ export interface LikesModel {
 
 interface UserModel {
   id: string;
+}
+
+//! interface pour update news non fonctionnelle 
+export interface UpdateNewsForm {
+  title?: string;
+  content?: string;
+  imageUrl?: string;
+  updatedAt?: Date
 }

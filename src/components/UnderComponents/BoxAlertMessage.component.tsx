@@ -5,13 +5,11 @@ interface AlertMessageDeleteNews {
   handleOpenModal: () => void;
   handleDeleteNews: () => void;
   openModal: boolean;
-  textButton: string;
 }
 
 export function AlertAuthorizeDeleteNews({
   openModal,
   handleCloseModal,
-  textButton,
   handleDeleteNews,
 }: AlertMessageDeleteNews) {
   return (
@@ -39,7 +37,7 @@ export function AlertAuthorizeDeleteNews({
             handleCloseModal();
           }}
         >
-          {textButton}
+          Yes
         </Button>
         <Button
           variant="contained"

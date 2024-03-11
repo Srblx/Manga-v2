@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import ApiAxios from "../utils/axios.api";
 import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
 import { ButtonCustom } from "../components/UnderComponents/BtnCustom.component";
+import { Pages } from "../utils/route.utils";
+import { ApiRoutes } from "../utils/routeApi.utils";
 
 const StyledStackContentTextField = styled(Stack)({
   marginTop: "7rem",
@@ -46,7 +48,7 @@ export function FormAddNews() {
 
   const handleSuccess = () => {
     setSucces("News added with success !");
-    navigate("/news");
+    navigate(Pages.NEWS);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +62,7 @@ export function FormAddNews() {
   const { mutate: addNews } = useMutation({
     mutationFn: async (newsData: AddNewsForm) => {
       try {
-        const response = await ApiAxios.post("news", newsData);
+        const response = await ApiAxios.post(ApiRoutes.NEWS, newsData);
         return response.data;
       } catch (error: any) {
         throw new Error("Add news: " + error.message);
@@ -74,7 +76,7 @@ export function FormAddNews() {
     const isValid = validateFormAddNews(formData, setError);
     ("Form submitted");
     if (isValid) {
-      await addNews(formData);
+      addNews(formData);
       setError("");
     }
   };
@@ -86,7 +88,6 @@ export function FormAddNews() {
       <StyledH1>Add news </StyledH1>
       <StyledStackContentTextField>
         <StyledH1TitleFromAddNews>Add new news</StyledH1TitleFromAddNews>
-        {/* <form onSubmit={handleSubmit}> */}
         <StyledTextFieldNews
           name="title"
           id="filled-basic"
@@ -116,7 +117,7 @@ export function FormAddNews() {
           variant="filled"
           onChange={handleChange}
         />
-        <p style={{ color: "white" }}>{error}</p>
+        <p style={{ color: "red" }}>{error}</p>
         <p style={{ color: "white" }}>{succes}</p>
         <ButtonCustom
           background={"green"}
@@ -125,7 +126,6 @@ export function FormAddNews() {
         >
           Register news
         </ButtonCustom>
-        {/* </form> */}
       </StyledStackContentTextField>
     </Stack>
   );

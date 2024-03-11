@@ -21,13 +21,17 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
-
-
+import { Pages } from "../utils/route.utils";
+import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
 
 export function LoginForm() {
-  const [formData, setFormData] = useState<FormLoginData>({});
+  // const [formData, setFormData] = useState<FormLoginData>({});
+  const [formData, setFormData] = useState<FormLoginData>({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState<string>("");
-  const {  setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,18 +49,15 @@ export function LoginForm() {
   const handleSuccess = (data: any) => {
     setError("");
     localStorage.setItem("accessToken", data.accessToken);
-    setUser(data.user)
-    setTimeout(() => {
-      localStorage.removeItem("accessToken");
-    }, 3600000); //? 1 hour expiration
-      navigate("/");
+    setUser(data.user);
+    navigate(Pages.HOME);
   };
 
   const { mutate: loginUser, isPending } = useMutation({
     mutationFn: async (userData: FormLoginData) => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/v1/auth/login",
+          `${URL_BASE_NEST_SKELETON + ApiRoutes.LOGIN}`,
           userData,
           {
             headers: {
@@ -86,6 +87,12 @@ export function LoginForm() {
     handleSubmit();
   };
 
+  const handleLogin = () => {
+    const defaultFormData = { email: "aserbelloni@dev-id.fr", password: "Motdepasse@@@" };
+    loginUser(defaultFormData);
+  };
+
+
   return (
     <StyledStackContentAllForm spacing={8}>
       <StyledStackForm>
@@ -95,7 +102,9 @@ export function LoginForm() {
             direction="column"
             alignItems="start"
           >
-            <StyledH1TitleLoginForm>Login</StyledH1TitleLoginForm>
+            <StyledH1TitleLoginForm onClick={handleLogin}>
+              Login
+            </StyledH1TitleLoginForm>
             <LabelCustom margin="2em 0 .1em 0">
               E-Mail address <RequiredField />
             </LabelCustom>
@@ -154,7 +163,7 @@ export function LoginForm() {
           <StyledParagrapheIfNotAccount>
             You don't have an account ?{" "}
             <StyledSpanIfNotAccountGoToSignUp>
-              <StyledLink to={`/signup`}>Sign up !</StyledLink>
+              <StyledLink to={Pages.SIGN_UP}>Sign up !</StyledLink>
             </StyledSpanIfNotAccountGoToSignUp>
           </StyledParagrapheIfNotAccount>
         </form>

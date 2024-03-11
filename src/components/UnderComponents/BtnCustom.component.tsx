@@ -1,37 +1,56 @@
-import { Button, Stack } from "@mui/material";
+import { Button, Stack, SvgIconTypeMap } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 
-export function ButtonCustom(props: any) {
-  //! faire plusieur props avec chacune leur type type SxProps de mui
+
+interface PropsCustom {
+onClick?: () => void;
+useLinkedInIcon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+  muiName: string;
+};
+background?: string;
+boxShadow?: string;
+padding?: string;
+children: string;
+type?: string;
+hoverBackground?: string;
+hoverBoxShadow?: string;
+disabled?: boolean;
+}
+
+export function ButtonCustom(props: PropsCustom) {
   const capitalizeFirstLetter = (text: string) => {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   };
+  const { children, onClick, useLinkedInIcon, background, boxShadow, padding, type, hoverBackground, hoverBoxShadow, disabled } = props
 
   return (
     <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
       <Button
-        onClick={props.onClick}
+      type={type}
+        onClick={onClick}
         startIcon={
-          props.useLinkedInIcon ? <LinkedInIcon fontSize="large" /> : null
+          useLinkedInIcon ? <LinkedInIcon fontSize="large" /> : null
         }
+        disabled={disabled}
         sx={{
-          background: props.background || "black",
+          background: background || "black",
           fontFamily: "Youtube Sans",
-          boxShadow: props.boxShadow || undefined,
+          boxShadow: boxShadow || undefined,
           color: "#FFFFFF",
           fontSize: "18px",
           textTransform: "math-auto",
           fontWeight: "400",
           borderRadius: "15px",
-          padding: props.padding,
+          padding: padding,
           "&:hover": {
-            background: props.background || "black",
+            background: hoverBackground || "black",
             color: "#FFFFFF",
-            boxShadow: props.boxShadow || undefined,
+            boxShadow: hoverBoxShadow || undefined,
           },
         }}
       >
-        {capitalizeFirstLetter(props.children)}
+        {capitalizeFirstLetter(children)}
       </Button>
     </Stack>
   );

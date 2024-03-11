@@ -11,6 +11,7 @@ import { EditNews } from "../EditNews.screen";
 import { ShowNews } from "../News.screen";
 import { LoginForm } from "../LoginForm.screen";
 import { SignUpForm } from "../SignUpForm.component";
+import { Pages } from "../../utils/route.utils";
 
 export function Screens() {
   const { user } = useUserContext();
@@ -21,20 +22,23 @@ export function Screens() {
         <PageNumberProvider>
           {user ? (
             <Routes>
-              <Route path="/" element={<ListManga />} />
-              <Route path="/:id" element={<SingleManga />} />
-              <Route path="/" element={<ListManga />} />
-              <Route path="/news" element={<ShowNews />} />
+              <Route path={Pages.HOME} element={<ListManga />} />
+              <Route path={`${Pages.HOME}:id`} element={<SingleManga />} />
+              <Route path={Pages.HOME} element={<ListManga />} />
+              <Route path={Pages.NEWS} element={<ShowNews />} />
 
-              <Route path="/signup" element={<SignUpForm />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/AddNews" element={<FormAddNews />} />
-              <Route path="/editNews" element={<EditNews />} />
+              <Route path={Pages.PROFILE} element={<Profile />} />
+              <Route path={Pages.ADD_NEWS} element={<FormAddNews />} />
+              <Route path={`${Pages.EDIT_NEWS}:newId`} element={<EditNews />} />
             </Routes>
           ) : (
             <Routes>
-              <Route path="/" element={<LoginForm />} />
-              <Route path="*" element={<Navigate to={"/"} replace />} />
+              <Route path={Pages.HOME} element={<LoginForm />} />
+              <Route path={Pages.SIGN_UP} element={<SignUpForm />} />
+              <Route
+                path={Pages.ALL_REDIRECT}
+                element={<Navigate to={"/"} replace />}
+              />
             </Routes>
           )}
         </PageNumberProvider>

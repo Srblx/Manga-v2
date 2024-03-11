@@ -4,6 +4,7 @@ import { MangaAuthorModel } from "../interfaces/MangaModel.interface";
 import { Link } from "react-router-dom";
 import React from "react";
 import styled from "@emotion/styled";
+import { Pages } from "../utils/route.utils";
 
 const StyledStackForTitle = styled(Stack)({
   width: "100%",
@@ -48,7 +49,7 @@ type SingleMangaItemProps = {
 };
 
 const BackHomeLink = React.memo(() => (
-  <Link to={`/`}>
+  <Link to={Pages.HOME}>
     <StyledCustomButton>Back to Home</StyledCustomButton>
   </Link>
 ));
@@ -88,6 +89,7 @@ const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
           </Stack>
         </StyledDivRightColumn>
         <StyledDivLeftColumn>
+          <div style={{border: "solid 5px black", marginBottom: "2rem"}}></div>
           <div style={{ paddingTop: ".4rem" }}>
             Authors :
             {manga.authors.map((author: MangaAuthorModel, index: number) => (

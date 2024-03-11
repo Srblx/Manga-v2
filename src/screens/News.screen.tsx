@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
 import { LikesModel, NewsModel } from "../interfaces/NewsModel.interface";
 import { CardNews } from "../components/CardNews.component";
 import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
-import UserContext from "../context/UserContext";
 import ApiAxios from "../utils/axios.api";
 import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
+import { useQuery } from "@tanstack/react-query";
+import { ApiRoutes } from "../utils/routeApi.utils";
 
 const StyledStackContentItem = styled(Stack)({
   justifyContent: "center",
@@ -15,51 +15,22 @@ const StyledStackContentItem = styled(Stack)({
 });
 
 export function ShowNews() {
-  const [newsData, setNewsData] = useState<NewsModel[]>([]);
-  const [allLikes, setAllLikes] = useState<LikesModel[]>([]);
+  const { data: newsData } = useQuery<NewsModel[]>({
+    queryKey: ["news"],
+    queryFn: async () => {
+      const response = await ApiAxios.get(ApiRoutes.NEWS);
+      return response.data;
+    },
+  });
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await ApiAxios.get("news");
-        setNewsData(response.data);
-        // return response.data; //! Pas obligatoire??
-      } catch (error: any) {
-        throw new Error("Fetch news error" + error.message);
-      }
-    };
+  const { data: allLikes } = useQuery<LikesModel[]>({
+    queryKey: ["likes"],
+    queryFn: async () => {
+      const response = await ApiAxios.get(ApiRoutes.LIKES);
+      return response.data;
+    },
+  });
 
-    fetchNews();
-  }, []);
-
-  useEffect(() => {
-    const fetchLikes = async () => {
-      try {
-        const response = await ApiAxios.get("likes");
-        // const newsLikes = response.data;
-        // setTotalLikes(newsLikes.length);
-        setAllLikes(response.data);
-        // console.log('allLikes : ', allLikes);
-      } catch (error) {
-        throw new Error("Fetch like error");
-      }
-    };
-    fetchLikes();
-  }, []);
-
-  const handleDeleteNews = async (newsId: string) => {
-    try {
-      await ApiAxios.delete(`news/${newsId}`);
-      setNewsData(newsData.filter((news) => news.id !== newsId));
-    } catch (error) {
-      console.error("Delete unauthorized", error);
-    }
-  };
-
-  console.log("allLikes : ", allLikes);
-  // console.log('allLikes.filter : ', allLikes.filter((like) => {
-  //           return like.news.id === like.user.id;
-  //         }));
   return (
     <>
       <StyledH1>News </StyledH1>
@@ -73,13 +44,7 @@ export function ShowNews() {
             <CardNews
               key={newsModel.id}
               newsModel={newsModel}
-              onDelete={handleDeleteNews}
-              likes={allLikes.filter((like) => {
-                return (
-                  like.news.id === newsModel.id
-                ); /* && like.user.id === user?.id; */
-              })}
-              // onEdit={}
+              likes={allLikes?.filter((like) => like.news.id === newsModel.id)}
             />
           ))}
         </StyledStackContentItem>

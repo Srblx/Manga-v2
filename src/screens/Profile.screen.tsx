@@ -1,6 +1,35 @@
-import { Button, Stack } from "@mui/material";
+import { Stack, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 
+const StyledUl = styled("ul")({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-around",
+  background: "#000000e9",
+  width: "100%",
+  color: "white",
+  fontSize: "1.4rem",
+  padding: 0,
+  margin: 0,
+  border: "solid white 2px",
+  borderRadius: "10px",
+});
+
+const StyledLi = styled("li")({
+  listStyle: "none",
+});
+
+const StyledImg = styled("img")({
+  margin: "1rem 0",
+  borderRadius: "20px",
+  border: "solid 2px red",
+});
+
+const StyledH1 = styled("h1")({
+  background: "white",
+  marginTop: "4.5rem",
+  textAlign: "center",
+});
 
 export function Profile() {
   const [userFirstname, setUserFirstname] = useState("");
@@ -22,57 +51,17 @@ export function Profile() {
 
   return (
     <>
-      <h1
-        style={{
-          background: "white",
-          marginTop: "4.5rem",
-          textAlign: "center",
-        }}
-      >
-        User profile
-      </h1>
+      <StyledH1 style={{}}>User profile</StyledH1>
       <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-        <img
-          src="src/assets/pfp-manga.jpeg"
-          style={{
-            margin: "1rem 0",
-            borderRadius: "20px",
-            border: "solid 2px red",
-          }}
-        />
+        <StyledImg src="src/assets/pfp-manga.jpeg" />
       </Stack>
       <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-        <ul
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            background: "#000000e9",
-            width: "100%",
-            color: "white",
-            fontSize: "1.4rem",
-            padding: 0,
-            margin: 0,
-            border: "solid white 2px",
-            borderRadius: "10px",
-          }}
-        >
-          <li style={{ listStyle: "none" }}>Firstname : {userLastname} </li> |
-          <li style={{ listStyle: "none" }}>Lastname : {userFirstname} </li> |
-          <li style={{ listStyle: "none" }}>Email : {userEmail} </li> |
-          <li style={{ listStyle: "none" }}>Role : {userRole}</li>
-        </ul>
-        <Button
-          sx={{
-            background: "white",
-            padding: ".5rem",
-            marginTop: "1rem",
-            border: "solid 2px black",
-          }}
-          // onClick={}
-        >
-          Change password
-        </Button>
+        <StyledUl>
+          <StyledLi>Firstname : {userLastname} </StyledLi> |
+          <StyledLi>Lastname : {userFirstname} </StyledLi> |
+          <StyledLi>Email : {userEmail} </StyledLi> |
+          <StyledLi>Role : {userRole}</StyledLi>
+        </StyledUl>
       </Stack>
     </>
   );

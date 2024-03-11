@@ -12,6 +12,7 @@ import ScrollToTopButton from "../components/BtnScrollTop.component";
 import axios from "axios";
 import { Box, Stack, styled } from "@mui/material";
 import UserContext from "../context/UserContext";
+import { URL_BASE_MANGA_SAFE } from "../utils/routeApi.utils";
 
 
 const StyledStackForAllCardManga = styled(Stack)({
@@ -96,7 +97,7 @@ export function ListManga() {
     { pageParam }: { pageParam: number },
     searchValue: string
   ): Promise<{ data: MangaModelData; pagination: any }> => {
-    const apiUrl = `https://api.jikan.moe/v4/manga?sfw=true&page=${pageParam}${
+    const apiUrl = `${URL_BASE_MANGA_SAFE + pageParam}${
       searchValue ? `&q=${searchValue}` : ""
     }`;
 

@@ -9,6 +9,8 @@ import styled from "@emotion/styled";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { Pages } from "../utils/route.utils";
+import { useState } from "react";
 
 const StyledMenuItem = styled(MenuItem)({
   fontSize: "1.5rem",
@@ -22,8 +24,8 @@ export default function PositionedMenu({
 }: {
   isAuthenticated: boolean;
 }) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [openModal, setOpenModal] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
   const open = Boolean(anchorEl);
@@ -44,31 +46,29 @@ export default function PositionedMenu({
     localStorage.clear();
     handleClose();
     window.location.reload();
-    navigate('/');
+    navigate(Pages.HOME);
   };
 
   return (
     <div>
-      <Button
+      <IconButton
         id="demo-positioned-button"
         aria-controls={open ? "demo-positioned-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        <IconButton>
-          <AccountCircleRoundedIcon
-            fontSize="large"
-            sx={{
-              color: "white",
-              marginRight: ".8rem",
-              display: "center",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          />
-        </IconButton>
-      </Button>
+        <AccountCircleRoundedIcon
+          fontSize="large"
+          sx={{
+            color: "white",
+            marginRight: ".8rem",
+            display: "center",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        />
+      </IconButton>
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
@@ -93,7 +93,7 @@ export default function PositionedMenu({
           <div>
             <StyledMenuItem onClick={handleClose}>
               <Link
-                to={`/login`}
+                to={Pages.HOME}
                 style={{
                   color: "black",
                   textDecoration: "none",
@@ -104,7 +104,7 @@ export default function PositionedMenu({
             </StyledMenuItem>
             <StyledMenuItem onClick={handleClose}>
               <Link
-                to={`/signup`}
+                to={Pages.SIGN_UP}
                 style={{ color: "black", textDecoration: "none" }}
               >
                 Sign Up
@@ -116,7 +116,7 @@ export default function PositionedMenu({
           <div>
             <StyledMenuItem onClick={handleClose}>
               <Link
-                to={`/profile`}
+                to={Pages.PROFILE}
                 style={{
                   color: "black",
                   textDecoration: "none",

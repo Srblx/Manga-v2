@@ -36,5 +36,4 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-
 export default UserContext;

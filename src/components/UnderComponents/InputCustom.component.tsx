@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
+import { ChangeEventHandler } from "react";
 
 const StyledTextFieldNews = styled(TextField)({
   background: "white",
-  width: "75%",
+  width: "85%",
   borderRadius: "3px",
   margin: "1.5rem",
 });
@@ -15,7 +16,10 @@ interface AddNews {
   placeholder?: string;
   value: string | undefined;
   numberRow?: number;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  maxRows?: number;
+  minRows?: number;
+  // rows?: number;
+  onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
 export function TextFieldUpdateNews({
@@ -34,6 +38,9 @@ export function TextFieldUpdateNews({
       label={label}
       placeholder={placeholder}
       variant="filled"
+      multiline={numberRow ? true : false}
+      minRows={3}
+      // rows={numberRow || 1}
       value={value}
       maxRows={numberRow}
       onChange={onChange}

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { URL_BASE_NEST_SKELETON } from "./routeApi.utils";
 
-const ApiAxios = axios.create({baseURL: 'http://localhost:3000/api/v1/'})
+const ApiAxios = axios.create({baseURL: URL_BASE_NEST_SKELETON})
 
 ApiAxios.interceptors.request.use(
     (config) => {

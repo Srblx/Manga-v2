@@ -6,6 +6,7 @@ import PositionedMenu from "./MenuUser.component";
 import { Box, Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
+import { Pages } from "../utils/route.utils";
 
 const StyledBoxForNavBar = styled(Box)({
   flexGrow: 1,
@@ -89,17 +90,17 @@ export default function NavBar() {
         <Toolbar sx={{ background: "black" }}>
           <PositionedMenu isAuthenticated={isAuthenticated} />
           <StyledTypographyForNavBar variant="h6">
-            <StyledForLinkInNav to={`/`}>Home</StyledForLinkInNav>
+            <StyledForLinkInNav to={Pages.HOME}>Home</StyledForLinkInNav>
           </StyledTypographyForNavBar>
           <StyledTypographyForNavBar variant="h6">
-            <StyledForLinkInNav to={`/`}>Store</StyledForLinkInNav>
+            <StyledForLinkInNav to={Pages.HOME}>Store</StyledForLinkInNav>
           </StyledTypographyForNavBar>
           <StyledTypographyForNavBar variant="h6">
-            <StyledForLinkInNav to={`news`}>News</StyledForLinkInNav>
+            <StyledForLinkInNav to={Pages.NEWS}>News</StyledForLinkInNav>
           </StyledTypographyForNavBar>
           {isAdmin && (
             <StyledTypographyForNavBar variant="h6">
-              <StyledForLinkInNav to={`addNews`}>Add News</StyledForLinkInNav>
+              <StyledForLinkInNav to={Pages.ADD_NEWS}>Add News</StyledForLinkInNav>
             </StyledTypographyForNavBar>
           )}
           <Button

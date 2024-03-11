@@ -5,19 +5,41 @@ import {
   InputAdornment,
   OutlinedInput,
 } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
+import TextField, { TextFieldVariants } from "@mui/material/TextField";
+import React, { ChangeEventHandler, useState } from "react";
 
-export default function TextFieldCustom(props: any) {
+interface CustomProps {
+  id?: string; 
+  value?: string | undefined;
+  name?: string;
+  variant?: TextFieldVariants;
+  placeholder?: string;
+  color?: string;
+  fontFamily?: string;
+  label?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+}
+
+export default function TextFieldCustom(props: CustomProps) {
+  const { 
+    id,
+    value,
+    name,
+    variant,
+    placeholder,
+    color,
+    fontFamily,
+    onChange
+  } = props
   return (
     <TextField
-      id={props.id}
+      id={id}
       size="small"
-      value={props.value}
-      name={props.name}
-      onChange={props.onChange}
-      variant={props.variant}
-      placeholder={props.placeholder}
+      value={value}
+      name={name}
+      onChange={onChange}
+      variant={variant}
+      placeholder={placeholder}
       sx={{
         width: "100%",
         background: "#F3F3F3",
@@ -26,15 +48,22 @@ export default function TextFieldCustom(props: any) {
       }}
       InputProps={{
         style: {
-          color: props.color || "#222240",
-          fontFamily: props.fontFamily || "Youtube Sans",
+          color: color || "#222240",
+          fontFamily: fontFamily || "Youtube Sans",
         },
       }}
     />
   );
 }
 
-export function TextFielCustomPassword(props: any) {
+export function TextFielCustomPassword(props: CustomProps) {
+  const { 
+    value,
+    name,
+    placeholder,
+    label,
+    onChange
+  } = props
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -61,11 +90,11 @@ export function TextFielCustomPassword(props: any) {
               </IconButton>
             </InputAdornment>
           }
-          label={props.label}
-          placeholder={props.placeholder}
-          value={props.value}
-          onChange={props.onChange}
-          name={props.name}
+          label={label}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          name={name}
           sx={{
             background: "#F3F3F3",
             "& fieldset": { border: "none" },

@@ -1,20 +1,24 @@
+import { IconButton, Stack, styled } from "@mui/material";
 import {
-  IconButton,
-  Stack,
-  styled,
-} from "@mui/material";
-import { LikesModel, NewsModel } from "../interfaces/NewsModel.interface";
+  AddNewsForm,
+  LikesModel,
+  NewsModel,
+} from "../interfaces/NewsModel.interface";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { format } from "date-fns";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import UserContext from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
 import ApiAxios from "../utils/axios.api";
 import { AlertAuthorizeDeleteNews } from "./UnderComponents/BoxAlertMessage.component";
 import { ADMIN } from "../utils/constant.utils";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { LoadingDisplayManga } from "./LoadingDisplayManga.component";
+import { ErrorDisplayManga } from "./ErrorDisplayMangaList.component";
+import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
+import UpdateNewsModal from "./UnderComponents/ModalEditNews.component";
 
 const StyledDivContentOneItem = styled("div")({
   background: "white",
@@ -32,160 +36,237 @@ const StyledImgNews = styled("img")({
   height: "auto",
   borderRadius: "5px",
   maxHeight: "250px",
-  overflow: "hidden", 
+  overflow: "hidden",
 });
 
 const StyledStackContentDescription = styled(Stack)({
   justifyContent: "center",
   alignItems: "center",
-  margin: "1rem 0", 
+  margin: "1rem 0",
 });
-
-// const StyledBoxForModalConfirmDelete = styled(Box)({
-//   left: "50%",
-//   boxShadow: 24,
-//   position: "absolute",
-//   top: "50%",
-//   transform: "translate(-50%, -50%)",
-//   bgcolor: "white",
-//   p: 4,
-//   textAlign: "center",
-// });
-
-// const StyledBoxForModalConfirmDelete = styled(Box)({
-//   position: "absolute",
-//   boxShadow: 24,
-//   left: "50%",
-//   top: "50%",
-//   transform: "translate(-50%, -50%)",
-//   bgcolor: "white",
-//   p: 4,
-//   textAlign: "center",
-// });
 
 type NewsItemProps = {
   newsModel: NewsModel;
-  likes: LikesModel[];
-  onDelete: (newsId: string) => void;
-  // onEdit: (news: NewsModel) => void
+  likes: LikesModel[] | undefined;
 };
 
-export function CardNews({ newsModel, likes, onDelete/* , onEdit */ }: NewsItemProps) {
+export function CardNews({ newsModel, likes = [] }: NewsItemProps) {
   const { user } = useContext(UserContext);
-  const [likeByMe, setLikeByMe] = useState<LikesModel | undefined>(
-    likes.find((like) => like.user.id === user?.id)
-  );
-  const [allLikesForOneNews, setAllLikesForOneNews] = useState<number>(likes.length);
-  // console.log('likes : ' + newsModel.title, likes);
-  // console.log('allLikesForOneNews : ', allLikesForOneNews);
-  const [openModal, setOpenModal] = useState(false);
-  const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(user?.role === ADMIN);
 
-  
+  const [allLikesForOneNews, setAllLikesForOneNews] = useState<number>(
+    likes.length
+  );
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [isAdmin] = useState(user?.role === ADMIN);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [formData, setFormData] = useState<AddNewsForm>({});
+
+  const {
+    data: newsData,
+    refetch: refetchNews,
+    isError,
+    isPending,
+    error,
+  } = useQuery<NewsModel[]>({
+    queryKey: ["news"],
+    queryFn: async () => {
+      const response = await ApiAxios.get(ApiRoutes.NEWS);
+      return response.data;
+    },
+    gcTime: 5000,
+  });
+  const currentNews = newsData?.find((news) => news.id === newsModel.id);
+
+  const { data: likeData } = useQuery<LikesModel[]>({
+    queryKey: ["likes"],
+    queryFn: async () => {
+      const response = await ApiAxios.get(ApiRoutes.LIKES);
+      return response.data;
+    },
+    gcTime: 5000,
+  });
+
+  const [likeByMe, setLikeByMe] = useState<LikesModel | undefined>(
+    likeData?.find((like) => like.user.id === user?.id)
+  );
+
+  const { mutate: createLikeMutation } = useMutation({
+    mutationFn: async (option: { newsId: string; userId: string }) => {
+      const response = await ApiAxios.post(ApiRoutes.LIKES, {
+        user: option.userId,
+        news: option.newsId,
+      });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setLikeByMe(data);
+      setAllLikesForOneNews((prev) => prev + 1);
+    },
+    onError: (error) => {
+      console.error("Error creating like:", error);
+    },
+  });
+
+  const { mutate: deleteLikeMutation } = useMutation({
+    mutationFn: async (likeId: string) => {
+      await ApiAxios.delete(`${ApiRoutes.LIKES_ + likeId}`);
+      return likeId;
+    },
+    onSuccess: () => {
+      setLikeByMe(undefined);
+      setAllLikesForOneNews((prev) => prev - 1);
+    },
+    onError: (error) => {
+      console.error("Error deleting like:", error);
+    },
+  });
+
+  const { mutate: deleteNewsMutation } = useMutation({
+    mutationFn: async (newId: string) => {
+      const response = await ApiAxios.delete(`${ApiRoutes.NEWS + newId}`);
+      return response.data;
+    },
+    onSuccess: () => {
+      refetchNews();
+    },
+    onError: () => {
+      console.error("Error deleting news:", error);
+    },
+  });
+
   const onClickForLike = async () => {
-    try {
-      if (!likeByMe) {
-        const response = await ApiAxios.post("likes", {
-          news: newsModel.id,
-          user: user?.id,
-        });
-        setLikeByMe(response.data._id);
-        // console.log('likeByMe : ', response.data._id);
-        setAllLikesForOneNews(previousState => previousState + 1);
-      } else {
-        const likedId = likeByMe;
-        // console.log('likedId : ', likedId);
-        await ApiAxios.delete(`likes/${likedId}`);
-        setLikeByMe(undefined);
-        setAllLikesForOneNews(previousState => previousState - 1);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la création/suppression du like", error);
+    if (!user?.id) return;
+    if (!likeByMe) {
+      createLikeMutation({
+        newsId: newsModel.id,
+        userId: user?.id,
+      });
+    } else {
+      deleteLikeMutation(likeByMe.id);
     }
   };
 
-  const handleDeleteNews = () => {
-    onDelete(newsModel.id);
+  useEffect(() => {
+    setAllLikesForOneNews(likes.length);
+    setLikeByMe(likes?.find((like) => like.user.id === user?.id));
+  }, [likes, user?.id]);
+
+  const handleDeleteNews = async (newsId: string) => {
+    try {
+      deleteNewsMutation(newsId);
+      refetchNews();
+    } catch (error) {
+      console.error("Delete unauthorized", error);
+    }
   };
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
+  const handleOpenDeleteModal = () => {
+    setOpenDeleteModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
   };
 
-  const handleOnClickEdit = () => {
-    navigate(`/editNews`);
+  const handleOpenEditModal = async () => {
+    const response = await ApiAxios.get(ApiRoutes.NEWS + newsModel.id);
+    setFormData(response.data);
+    setOpenEditModal(true);
   };
-// console.log('allLikes : ', likes);
+
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false);
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const { mutate: updateNewsMutation } = useMutation({
+    mutationFn: async ({
+      newsId,
+      formData,
+    }: {
+      newsId: string;
+      formData: AddNewsForm;
+    }) => {
+      const response = await ApiAxios.patch(
+        URL_BASE_NEST_SKELETON + ApiRoutes.NEWS + newsId,
+        formData
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log("News updated successfully", data);
+      refetchNews();
+    },
+    onError: (error) => {
+      console.error("Error updating news:", error);
+    },
+  });
+
+  const handleSubmitUpdate = async () => {
+    updateNewsMutation({ newsId: newsModel.id, formData });
+  };
+
+  if (isPending) return <LoadingDisplayManga />;
+  if (isError) return <ErrorDisplayManga error={error.message} />;
   return (
-    <>
-      <StyledDivContentOneItem>
-        <Stack
-          direction="row"
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          {isAdmin && (
-            <IconButton onClick={handleOpenModal}>
-              <DeleteForeverIcon sx={{ color: "red" }} />
-            </IconButton>
-          )}
-          <IconButton onClick={handleOnClickEdit}>
-            <EditIcon sx={{ color: "blue" }} />
-          </IconButton>
-        </Stack>
-        <p>{newsModel.id}</p>
-        <p>{likes.map((like) => like.id)}</p>
-        <StyledImgNews src={newsModel.imageUrl} alt="News"/>
-        <Stack
-          direction="row"
-          sx={{ alignSelf: "center", alignItems: "center" }}
-        >
-          <IconButton onClick={onClickForLike} sx={{ alignSelf: "center" }}>
-            {!likeByMe ? (
-              <FavoriteBorderIcon sx={{ color: "gray" }} />
-            ) : (
-              <FavoriteIcon sx={{ color: "red" }} />
-            )}
-          </IconButton>
-          <p>
-            {allLikesForOneNews} {allLikesForOneNews > 1 ? "Likes" : "Like"}
-          </p>
-        </Stack>
-        <h2>{newsModel.title}</h2>
-        <StyledStackContentDescription>
-          <p>{newsModel.content}</p>
-        </StyledStackContentDescription>
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <p>
-            <strong style={{ color: "blue" }}>
-              {format(new Date(newsModel.createdAt), "dd/MM/yyyy")}
-            </strong>
-          </p>
-          <p>
-            <strong>{`${newsModel.user.firstname} ${newsModel.user.lastname}`}</strong>
-          </p>
-        </Stack>
+    <StyledDivContentOneItem>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <IconButton onClick={handleOpenEditModal}>
+          <EditIcon sx={{ color: "blue" }} />
+        </IconButton>
         {isAdmin && (
-          <AlertAuthorizeDeleteNews
-            openModal={openModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-            handleDeleteNews={handleDeleteNews}
-            textButton="Yes"
-          />
+          <IconButton onClick={handleOpenDeleteModal}>
+            <DeleteForeverIcon sx={{ color: "red" }} />
+          </IconButton>
         )}
-      </StyledDivContentOneItem>
-    </>
+      </Stack>
+      <StyledImgNews src={currentNews?.imageUrl} alt="news" />
+      <Stack direction="row" alignItems="center" justifyContent="center">
+        <IconButton onClick={onClickForLike}>
+          {likeByMe ? (
+            <FavoriteIcon sx={{ color: "red" }} />
+          ) : (
+            <FavoriteBorderIcon sx={{ color: "gray" }} />
+          )}
+        </IconButton>
+        <p>
+          {allLikesForOneNews} {allLikesForOneNews === 1 ? "like" : "likes"}
+        </p>
+      </Stack>
+      <h2>{currentNews?.title}</h2>
+      <StyledStackContentDescription>
+        <p>{currentNews?.content}</p>
+      </StyledStackContentDescription>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <p>
+          <strong style={{ color: "blue" }}>
+            {format(new Date(newsModel.createdAt), "dd/MM/yyyy")}
+          </strong>
+        </p>
+        <p>
+          <strong>{`${currentNews?.user.firstname} ${currentNews?.user.lastname}`}</strong>
+        </p>
+      </Stack>
+      <AlertAuthorizeDeleteNews
+        openModal={openDeleteModal}
+        handleCloseModal={handleCloseDeleteModal}
+        handleDeleteNews={() => handleDeleteNews(newsModel.id)}
+        handleOpenModal={() => console.log("hello")}
+      />
+      <UpdateNewsModal
+        open={openEditModal}
+        onClose={handleCloseEditModal}
+        formData={formData}
+        handleChange={handleChange}
+        image={formData.imageUrl}
+        handleSubmit={handleSubmitUpdate}
+      />
+    </StyledDivContentOneItem>
   );
 }

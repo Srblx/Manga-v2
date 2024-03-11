@@ -15,6 +15,7 @@ import { formatCurrency } from "../utils/FormatCurrency.utils";
 import styled from "@emotion/styled";
 import { Card, CardContent } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Pages } from "../utils/route.utils";
 
 const StyledMangaCard = styled(Card)({
   height: "450px",
@@ -106,7 +107,7 @@ export function MangaCard({ manga, price, isAuthenticated }: MangaItemsProps) {
         <StyledStackContentBtnReadMore>
           <StyledLinkForReadMoreInfo
             style={{ color: "green" }}
-            to={`/${manga.mal_id}`}
+            to={`${Pages.HOME + manga.mal_id}`}
           >
             Read more...
           </StyledLinkForReadMoreInfo>

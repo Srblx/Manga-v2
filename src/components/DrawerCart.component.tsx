@@ -7,8 +7,10 @@ import { MangaModelData } from "../interfaces/MangaModel.interface";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import { useQuery } from "@tanstack/react-query";
+
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { URL_BASE_MANGA } from "../utils/routeApi.utils";
 
 const StyledParagrapheContentTotalCart = styled("p")({
   color: "white",
@@ -64,7 +66,7 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
     try {
       const axiosRequests = ItemsInCartClient.map(async (item) => {
         const response = await axios.get(
-          `https://api.jikan.moe/v4/manga/${item.id}`
+          `${URL_BASE_MANGA + item.id}`
         );
         return response.data.data as MangaModelData;
       });
@@ -76,7 +78,7 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
     }
   };
 
-  const { data } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["mangasItemsCart"],
     queryFn: fetchCartItemsInfo,
     //^ Temps de sauvegarde des date en cache || garbageCollector
@@ -90,6 +92,14 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
       quantity: ItemsInCartClient.find((y) => y.id === x.mal_id)?.quantity || 0,
     };
   });
+
+  if (isLoading) {
+    return <p>Chargement...</p>;
+  }
+  
+  if (isError) {
+    return <p>Erreur lors du chargement des données : {error.message}</p>;
+  }
 
   return (
     <Drawer

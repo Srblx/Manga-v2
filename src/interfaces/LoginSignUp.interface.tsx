@@ -11,7 +11,6 @@ export interface CreateUserDto {
   firstname?: string;
   email?: string;
   password?: string;
-  role: "USER";
 }
 
 export interface FormLoginData {
@@ -19,10 +18,9 @@ export interface FormLoginData {
   password?: string;
 }
 
-
 export interface User {
   id: string;
-  token?: string
+  token?: string;
   lastname?: string;
   firstname?: string;
   email?: string;

@@ -23,9 +23,17 @@ import { RequiredField } from "../components/UnderComponents/RequireField.compon
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Pages } from "../utils/route.utils";
+import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
 
 export function SignUpForm() {
-  const [formData, setFormData] = useState<FormSignUpData>({});
+  const [formData, setFormData] = useState<FormSignUpData>({
+    lastname: "",
+    firstname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
@@ -43,19 +51,20 @@ export function SignUpForm() {
 
   const handleSuccess = () => {
     setError("");
-    navigate("/login");
+    navigate(Pages.HOME);
   };
 
   const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
     const { ...userData } = formData;
-    return { ...userData, role: "USER" };
+    return { ...userData};
   };
 
   const { mutate: signUpUser, isPending } = useMutation({
-    mutationFn: async (userData: CreateUserDto) => {
+    mutationFn: async (userData: FormSignUpData) => {
       try {
+        delete userData.confirmPassword;
         const response = await axios.post(
-          "http://localhost:3000/api/v1/auth/register/",
+          `${URL_BASE_NEST_SKELETON + ApiRoutes.REGISTER}`,
           userData,
           {
             headers: {
@@ -103,7 +112,7 @@ export function SignUpForm() {
               name="lastname"
               value={formData.lastname}
               onChange={handleChange}
-              id="outlined-basic"
+              id="outlined-basic-lastname"
               variant="outlined"
               placeholder="Lastname"
             />
@@ -114,7 +123,7 @@ export function SignUpForm() {
               value={formData.firstname}
               onChange={handleChange}
               name="firstname"
-              id="outlined-basic"
+              id="outlined-basic-firstname"
               variant="outlined"
               placeholder="Firstname"
             />
@@ -125,7 +134,7 @@ export function SignUpForm() {
               value={formData.email}
               onChange={handleChange}
               name="email"
-              id="outlined-basic"
+              id="outlined-basic-mail"
               variant="outlined"
               placeholder="E-mail address"
             />
@@ -142,7 +151,7 @@ export function SignUpForm() {
                 value={formData.password}
                 onChange={handleChange}
                 name="password"
-                id="outlined-basic"
+                id="outlined-basic-password"
                 variant="outlined"
                 placeholder="Password"
               />
@@ -154,7 +163,7 @@ export function SignUpForm() {
               value={formData.confirmPassword}
               onChange={handleChange}
               name="confirmPassword"
-              id="outlined-basic"
+              id="outlined-basic-cofirm-password"
               variant="outlined"
               placeholder="Confirm password"
             />
@@ -187,7 +196,7 @@ export function SignUpForm() {
           <StyledParagrapheIfNotAccount>
             You already have an account ?{" "}
             <StyledSpanIfNotAccountGoToSignUp>
-              <StyledLink to={`/login`}>Connect !</StyledLink>
+              <StyledLink to={Pages.HOME}>Connect !</StyledLink>
             </StyledSpanIfNotAccountGoToSignUp>
           </StyledParagrapheIfNotAccount>
         </form>
