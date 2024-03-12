@@ -23,6 +23,7 @@ import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Pages } from "../utils/route.utils";
 import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
+import { PASSWORD, USER } from "../utils/privateConstant.utils";
 
 export function LoginForm() {
   // const [formData, setFormData] = useState<FormLoginData>({});
@@ -88,7 +89,7 @@ export function LoginForm() {
   };
 
   const handleLogin = () => {
-    const defaultFormData = { email: "aserbelloni@dev-id.fr", password: "Motdepasse@@@" };
+    const defaultFormData = { email: USER, password: PASSWORD };
     loginUser(defaultFormData);
   };
 
@@ -171,3 +172,5 @@ export function LoginForm() {
     </StyledStackContentAllForm>
   );
 }
+
+
