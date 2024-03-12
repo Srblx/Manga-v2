@@ -170,6 +170,7 @@ export function SignUpForm() {
           </Stack>
           {error && (
             <div
+            id="error_signup"
               style={{
                 color: "red",
                 textAlign: "center",
@@ -180,6 +181,7 @@ export function SignUpForm() {
             </div>
           )}
           <ButtonCustom
+            id="sign_up_btn"
             type="submit"
             background="#0B51E7"
             hoverBackground="#E8614D"

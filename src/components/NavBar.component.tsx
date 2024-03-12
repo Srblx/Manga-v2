@@ -1,11 +1,18 @@
+import {
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { AppBar, Button, Toolbar, Box, Typography, styled } from "@mui/material";
-import { useShoppingCart } from "../context/ShoppingCartContext";
-import { DrawerCart } from "./DrawerCart.component";
-import PositionedMenu from "./MenuUser.component";
 import { Link } from "react-router-dom";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 import UserContext from "../context/UserContext";
 import { Pages } from "../utils/route.utils";
+import { DrawerCart } from "./DrawerCart.component";
+import PositionedMenu from "./MenuUser.component";
 
 const StyledBoxForNavBar = styled(Box)({
   flexGrow: 1,
@@ -99,10 +106,13 @@ export default function NavBar() {
           </StyledTypographyForNavBar>
           {isAdmin && (
             <StyledTypographyForNavBar variant="h6">
-              <StyledForLinkInNav to={Pages.ADD_NEWS}>Add News</StyledForLinkInNav>
+              <StyledForLinkInNav to={Pages.ADD_NEWS}>
+                Add News
+              </StyledForLinkInNav>
             </StyledTypographyForNavBar>
           )}
           <Button
+            id="cart_btn"
             color="inherit"
             sx={{ margin: "10px" }}
             onClick={() => setIsOpen(true)}

@@ -43,8 +43,8 @@ export function LoginForm() {
     }));
   };
 
-  const handleError = (error: Error) => {
-    setError(error.message || "An error occurred during login.");
+  const handleError = (error: string) => {
+    setError(error || "An error occurred during login.");
   };
 
   const handleSuccess = (data: any) => {
@@ -71,7 +71,7 @@ export function LoginForm() {
         throw new Error("Login error: " + error.message);
       }
     },
-    onError: handleError,
+    onError: () => handleError("User or password unknown"),
     onSuccess: handleSuccess,
   });
 
@@ -147,7 +147,8 @@ export function LoginForm() {
               {error}
             </div>
           )}
-          <ButtonCustom
+          <ButtonCustom data-cy="login_button"
+            id="button-login"
             type="submit"
             background="#0B51E7"
             hoverBackground="#E8614D"

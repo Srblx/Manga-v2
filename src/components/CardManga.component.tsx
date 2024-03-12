@@ -122,6 +122,7 @@ export function MangaCard({ manga, price, isAuthenticated }: Readonly<MangaItems
               <>
                 {quantity === 0 ? (
                   <Button
+                    id="add_manga_in_cart"
                     onClick={handleAddToCartClick}
                     startIcon={<AddShoppingCartIcon />}
                     size="small"

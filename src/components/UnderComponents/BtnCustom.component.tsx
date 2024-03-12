@@ -16,17 +16,22 @@ type?: string;
 hoverBackground?: string;
 hoverBoxShadow?: string;
 disabled?: boolean;
+  data?: string;
+  id?: string;
+
 }
 
 export function ButtonCustom(props: PropsCustom) {
   const capitalizeFirstLetter = (text: string) => {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   };
-  const { children, onClick, useLinkedInIcon, background, boxShadow, padding, type, hoverBackground, hoverBoxShadow, disabled } = props
+  const { children, onClick, useLinkedInIcon, background, boxShadow, padding, type, hoverBackground, hoverBoxShadow, disabled, data, id } = props
 
   return (
     <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
       <Button
+  datatype={props.data}
+  id={props.id}
       type={type}
         onClick={onClick}
         startIcon={

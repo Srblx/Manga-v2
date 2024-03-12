@@ -1,15 +1,15 @@
-import Drawer from "@mui/material/Drawer";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { useShoppingCart } from "../context/ShoppingCartContext";
-import { IconButton, Stack, styled } from "@mui/material";
-import { formatCurrency } from "../utils/FormatCurrency.utils";
-import { MangaModelData } from "../interfaces/MangaModel.interface";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { IconButton, Stack, styled } from "@mui/material";
+import Drawer from "@mui/material/Drawer";
+import { useShoppingCart } from "../context/ShoppingCartContext";
+import { MangaModelData } from "../interfaces/MangaModel.interface";
+import { formatCurrency } from "../utils/FormatCurrency.utils";
 
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { URL_BASE_MANGA } from "../utils/routeApi.utils";
 
 const StyledParagrapheContentTotalCart = styled("p")({
@@ -51,7 +51,10 @@ type ShoppingCartProps = {
   closeCart: () => void;
 };
 
-export function DrawerCart({ openCart, closeCart }: Readonly<ShoppingCartProps>) {
+export function DrawerCart({
+  openCart,
+  closeCart,
+}: Readonly<ShoppingCartProps>) {
   const {
     ItemsInCartClient,
     removeFormCart,
@@ -65,9 +68,7 @@ export function DrawerCart({ openCart, closeCart }: Readonly<ShoppingCartProps>)
   const fetchCartItemsInfo = async () => {
     try {
       const axiosRequests = ItemsInCartClient.map(async (item) => {
-        const response = await axios.get(
-          `${URL_BASE_MANGA + item.id}`
-        );
+        const response = await axios.get(`${URL_BASE_MANGA + item.id}`);
         return response.data.data as MangaModelData;
       });
 
@@ -89,14 +90,14 @@ export function DrawerCart({ openCart, closeCart }: Readonly<ShoppingCartProps>)
     return {
       id: x.mal_id,
       manga: x,
-      quantity: ItemsInCartClient.find((y) => y.id === x.mal_id)?.quantity ?? 0,//|| 0,
+      quantity: ItemsInCartClient.find((y) => y.id === x.mal_id)?.quantity ?? 0, //|| 0,
     };
   });
 
   if (isLoading) {
     return <p>Chargement...</p>;
   }
-  
+
   if (isError) {
     return <p>Erreur lors du chargement des données : {error.message}</p>;
   }
@@ -122,6 +123,7 @@ export function DrawerCart({ openCart, closeCart }: Readonly<ShoppingCartProps>)
         }}
       >
         <StyledIconBtnCloseCart
+          id="close_cart_btn"
           sx={{
             color: "white",
             background: "red",

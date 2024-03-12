@@ -9,8 +9,8 @@ import TextField, { TextFieldVariants } from "@mui/material/TextField";
 import React, { ChangeEventHandler, useState } from "react";
 
 interface CustomProps {
-  id?: string; 
-  value?: string | undefined ;
+  id?: string;
+  value?: string | undefined;
   name?: string;
   variant?: TextFieldVariants;
   placeholder?: string;
@@ -21,16 +21,8 @@ interface CustomProps {
 }
 
 export default function TextFieldCustom(props: CustomProps) {
-  const { 
-    id,
-    value,
-    name,
-    variant,
-    placeholder,
-    color,
-    fontFamily,
-    onChange
-  } = props
+  const { id, value, name, variant, placeholder, color, fontFamily, onChange } =
+    props;
   return (
     <TextField
       id={id}
@@ -57,13 +49,7 @@ export default function TextFieldCustom(props: CustomProps) {
 }
 
 export function TextFielCustomPassword(props: CustomProps) {
-  const { 
-    value,
-    name,
-    placeholder,
-    label,
-    onChange
-  } = props
+  const { value, name, placeholder, label, onChange } = props;
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -73,33 +59,33 @@ export function TextFielCustomPassword(props: CustomProps) {
   };
 
   return (
-      <FormControl sx={{ width: "100%" }} variant="outlined" size="small">
-        <OutlinedInput
-          id="outlined-adornment-password"
-          type={showPassword ? "text" : "password"}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-          label={label}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          name={name}
-          sx={{
-            background: "#F3F3F3",
-            "& fieldset": { border: "none" },
-            borderRadius: "10px",
-          }}
-        />
-      </FormControl>
+    <FormControl sx={{ width: "100%" }} variant="outlined" size="small">
+      <OutlinedInput
+        id="outlined-adornment-password"
+        type={showPassword ? "text" : "password"}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        }
+        label={label}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        name={name}
+        sx={{
+          background: "#F3F3F3",
+          "& fieldset": { border: "none" },
+          borderRadius: "10px",
+        }}
+      />
+    </FormControl>
   );
 }

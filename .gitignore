@@ -24,3 +24,10 @@ dist-ssr
 *.sw?
 teconfig.node.json
 vite.config.ts
+
+jest.config.cjs
+cypress.config.ts
+babel.config.cjs
+
+__tests__/*
+src/utils/privateConstant.utils.ts
