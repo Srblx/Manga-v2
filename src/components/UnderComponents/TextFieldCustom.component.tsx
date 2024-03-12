@@ -73,7 +73,6 @@ export function TextFielCustomPassword(props: CustomProps) {
   };
 
   return (
-    <>
       <FormControl sx={{ width: "100%" }} variant="outlined" size="small">
         <OutlinedInput
           id="outlined-adornment-password"
@@ -102,6 +101,5 @@ export function TextFielCustomPassword(props: CustomProps) {
           }}
         />
       </FormControl>
-    </>
   );
 }

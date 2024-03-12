@@ -57,7 +57,7 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
     likes.length
   );
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(user?.role === ADMIN);
+  const [isAdmin] = useState(user?.role === ADMIN);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [formData, setFormData] = useState<AddNewsForm>({});
 
@@ -257,7 +257,6 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
         openModal={openDeleteModal}
         handleCloseModal={handleCloseDeleteModal}
         handleDeleteNews={() => handleDeleteNews(newsModel.id)}
-        // handleOpenModal={() => console.log("hello")}
       />
       <UpdateNewsModal
         open={openEditModal}

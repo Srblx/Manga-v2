@@ -5,12 +5,11 @@ import { MangaModelData } from "../interfaces/MangaModel.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { MangaCard } from "../components/CardManga.component";
 import SearchIcon from "@mui/icons-material/Search";
-import { TextField } from "@mui/material";
+import { TextField, Box, Stack, styled } from "@mui/material";
 import { ErrorDisplayManga } from "../components/ErrorDisplayMangaList.component";
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
 import ScrollToTopButton from "../components/BtnScrollTop.component";
 import axios from "axios";
-import { Box, Stack, styled } from "@mui/material";
 import UserContext from "../context/UserContext";
 import { URL_BASE_MANGA_SAFE } from "../utils/routeApi.utils";
 
