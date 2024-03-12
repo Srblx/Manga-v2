@@ -51,7 +51,7 @@ type ShoppingCartProps = {
   closeCart: () => void;
 };
 
-export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
+export function DrawerCart({ openCart, closeCart }: Readonly<ShoppingCartProps>) {
   const {
     ItemsInCartClient,
     removeFormCart,
@@ -89,7 +89,7 @@ export function DrawerCart({ openCart, closeCart }: ShoppingCartProps) {
     return {
       id: x.mal_id,
       manga: x,
-      quantity: ItemsInCartClient.find((y) => y.id === x.mal_id)?.quantity || 0,
+      quantity: ItemsInCartClient.find((y) => y.id === x.mal_id)?.quantity ?? 0,//|| 0,
     };
   });
 

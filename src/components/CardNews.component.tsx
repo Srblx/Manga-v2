@@ -6,7 +6,7 @@ import {
 } from "../interfaces/NewsModel.interface";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import { useContext, useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -50,14 +50,14 @@ type NewsItemProps = {
   likes: LikesModel[] | undefined;
 };
 
-export function CardNews({ newsModel, likes = [] }: NewsItemProps) {
+export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
   const { user } = useContext(UserContext);
 
   const [allLikesForOneNews, setAllLikesForOneNews] = useState<number>(
     likes.length
   );
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [isAdmin] = useState(user?.role === ADMIN);
+  const [isAdmin, setIsAdmin] = useState(user?.role === ADMIN);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [formData, setFormData] = useState<AddNewsForm>({});
 
@@ -246,7 +246,7 @@ export function CardNews({ newsModel, likes = [] }: NewsItemProps) {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <p>
           <strong style={{ color: "blue" }}>
-            {format(new Date(newsModel.createdAt), "dd/MM/yyyy")}
+            {/* format */(new Date(newsModel.createdAt), "dd/MM/yyyy")}
           </strong>
         </p>
         <p>
@@ -257,7 +257,7 @@ export function CardNews({ newsModel, likes = [] }: NewsItemProps) {
         openModal={openDeleteModal}
         handleCloseModal={handleCloseDeleteModal}
         handleDeleteNews={() => handleDeleteNews(newsModel.id)}
-        handleOpenModal={() => console.log("hello")}
+        // handleOpenModal={() => console.log("hello")}
       />
       <UpdateNewsModal
         open={openEditModal}

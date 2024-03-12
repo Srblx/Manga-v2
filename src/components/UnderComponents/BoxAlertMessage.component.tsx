@@ -2,7 +2,6 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 
 interface AlertMessageDeleteNews {
   handleCloseModal: () => void;
-  handleOpenModal: () => void;
   handleDeleteNews: () => void;
   openModal: boolean;
 }

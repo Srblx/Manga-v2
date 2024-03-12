@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material";
-import { SingleMangaModelData } from "../interfaces/MangaModel.interface";
-import { MangaAuthorModel } from "../interfaces/MangaModel.interface";
+import { SingleMangaModelData, MangaAuthorModel } from "../interfaces/MangaModel.interface";
 import { Link } from "react-router-dom";
 import React from "react";
 import styled from "@emotion/styled";

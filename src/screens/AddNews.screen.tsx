@@ -74,7 +74,6 @@ export function FormAddNews() {
 
   const handleSubmit = async () => {
     const isValid = validateFormAddNews(formData, setError);
-    ("Form submitted");
     if (isValid) {
       addNews(formData);
       setError("");

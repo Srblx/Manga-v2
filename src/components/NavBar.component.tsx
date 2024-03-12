@@ -1,9 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { AppBar, Button, Toolbar } from "@mui/material";
+import { AppBar, Button, Toolbar, Box, Typography, styled } from "@mui/material";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { DrawerCart } from "./DrawerCart.component";
 import PositionedMenu from "./MenuUser.component";
-import { Box, Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import { Pages } from "../utils/route.utils";
