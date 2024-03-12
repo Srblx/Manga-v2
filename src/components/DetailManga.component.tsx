@@ -65,7 +65,7 @@ const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
           <Stack>
             <img
               src={manga.images.jpg.image_url}
-              alt="Image"
+              alt="Manga poster"
               style={{
                 maxWidth: "100%",
                 maxHeight: "100%",
