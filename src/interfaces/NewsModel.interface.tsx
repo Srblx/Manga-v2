@@ -27,10 +27,9 @@ interface UserModel {
   id: string;
 }
 
-//! interface pour update news non fonctionnelle 
 export interface UpdateNewsForm {
   title?: string;
   content?: string;
   imageUrl?: string;
-  updatedAt?: Date
+  updatedAt?: Date;
 }

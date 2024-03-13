@@ -82,7 +82,6 @@ export function DrawerCart({
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["mangasItemsCart"],
     queryFn: fetchCartItemsInfo,
-    //^ Temps de sauvegarde des date en cache || garbageCollector
     gcTime: Infinity,
   });
 
@@ -90,7 +89,7 @@ export function DrawerCart({
     return {
       id: x.mal_id,
       manga: x,
-      quantity: ItemsInCartClient.find((y) => y.id === x.mal_id)?.quantity ?? 0, //|| 0,
+      quantity: ItemsInCartClient.find((y) => y.id === x.mal_id)?.quantity ?? 0,
     };
   });
 

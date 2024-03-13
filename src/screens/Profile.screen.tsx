@@ -7,12 +7,12 @@ const StyledUl = styled("ul")({
   justifyContent: "space-around",
   background: "#000000e9",
   width: "100%",
-  color: "white",
   fontSize: "1.4rem",
   padding: 0,
   margin: 0,
   border: "solid white 2px",
   borderRadius: "10px",
+  color: "gray",
 });
 
 const StyledLi = styled("li")({
@@ -55,10 +55,10 @@ export function Profile() {
       <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
         <StyledImg src="src/assets/pfp-manga.jpeg" />
       </Stack>
-      <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
+      <Stack sx={{ justifyContent: "center", alignItems: "center", margin: "0 6.5rem" }}>
         <StyledUl>
           <StyledLi>Firstname : {userLastname} </StyledLi> |
-          <StyledLi>Lastname : {userFirstname} </StyledLi> |
+          <StyledLi>Lastname : {userFirstname} </StyledLi> | 
           <StyledLi>Email : {userEmail} </StyledLi> |
           <StyledLi>Role : {userRole}</StyledLi>
         </StyledUl>

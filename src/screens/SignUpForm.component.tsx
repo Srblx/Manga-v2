@@ -1,10 +1,15 @@
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import { LabelCustom } from "../components/UnderComponents/LabelCustom.component";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ButtonCustom } from "../components/Shared/BtnCustom.component";
+import { LabelCustom } from "../components/Shared/LabelCustom.component";
+import { RequiredField } from "../components/Shared/RequireField.component";
 import TextFieldCustom, {
   TextFielCustomPassword,
-} from "../components/UnderComponents/TextFieldCustom.component";
-import Grid from "@mui/material/Grid";
-import { ButtonCustom } from "../components/UnderComponents/BtnCustom.component";
+} from "../components/Shared/TextFieldCustom.component";
 import {
   StyledH1TitleLoginForm,
   StyledLink,
@@ -13,16 +18,11 @@ import {
   StyledStackContentAllForm,
   StyledStackForm,
 } from "../components/StyledBaliseMui/LoginForm.styled";
-import { useState } from "react";
 import {
   CreateUserDto,
   FormSignUpData,
 } from "../interfaces/LoginSignUp.interface";
 import { validateFormSingUp } from "../utils/ValidForm.utils";
-import { RequiredField } from "../components/UnderComponents/RequireField.component";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { Pages } from "../utils/route.utils";
 import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
 
@@ -56,7 +56,7 @@ export function SignUpForm() {
 
   const transformFormDataToDto = (formData: FormSignUpData): CreateUserDto => {
     const { ...userData } = formData;
-    return { ...userData};
+    return { ...userData };
   };
 
   const { mutate: signUpUser, isPending } = useMutation({
@@ -170,7 +170,7 @@ export function SignUpForm() {
           </Stack>
           {error && (
             <div
-            id="error_signup"
+              id="error_signup"
               style={{
                 color: "red",
                 textAlign: "center",

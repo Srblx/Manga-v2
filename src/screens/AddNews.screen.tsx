@@ -1,13 +1,13 @@
+import styled from "@emotion/styled";
 import { Stack, TextField } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ButtonCustom } from "../components/Shared/BtnCustom.component";
+import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
 import { AddNewsForm } from "../interfaces/NewsModel.interface";
 import { validateFormAddNews } from "../utils/ValidForm.utils";
-import { useMutation } from "@tanstack/react-query";
-import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
 import ApiAxios from "../utils/axios.api";
-import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
-import { ButtonCustom } from "../components/UnderComponents/BtnCustom.component";
 import { Pages } from "../utils/route.utils";
 import { ApiRoutes } from "../utils/routeApi.utils";
 
@@ -82,7 +82,7 @@ export function FormAddNews() {
 
   return (
     <Stack
-    sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+      sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
     >
       <StyledH1>Add news </StyledH1>
       <StyledStackContentTextField>

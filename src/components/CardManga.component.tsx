@@ -1,21 +1,21 @@
+import styled from "@emotion/styled";
+import AddIcon from "@mui/icons-material/Add";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveIcon from "@mui/icons-material/Remove";
 import {
   Button,
+  Card,
+  CardContent,
   CardMedia,
   IconButton,
   Stack,
   Typography,
-  Card, 
-  CardContent
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { MangaModelData } from "../interfaces/MangaModel.interface";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { formatCurrency } from "../utils/FormatCurrency.utils";
-import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
 import { Pages } from "../utils/route.utils";
 
 const StyledMangaCard = styled(Card)({
@@ -75,7 +75,11 @@ type MangaItemsProps = {
   isAuthenticated: boolean;
 };
 
-export function MangaCard({ manga, price, isAuthenticated }: Readonly<MangaItemsProps>) {
+export function MangaCard({
+  manga,
+  price,
+  isAuthenticated,
+}: Readonly<MangaItemsProps>) {
   const {
     getItemQuantity,
     increaseCartQuantity,

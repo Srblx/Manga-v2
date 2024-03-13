@@ -1,9 +1,9 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SingleMangaModelData } from "../interfaces/MangaModel.interface";
 import MangaCard from "../components/DetailManga.component";
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
-import axios from "axios";
+import { SingleMangaModelData } from "../interfaces/MangaModel.interface";
 import { URL_BASE_MANGA } from "../utils/routeApi.utils";
 
 function SingleManga() {
@@ -15,9 +15,7 @@ function SingleManga() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${URL_BASE_MANGA + id}`
-        );
+        const response = await axios.get(`${URL_BASE_MANGA + id}`);
         const mangaData = response.data.data as SingleMangaModelData;
         setSingleManga(mangaData);
       } catch (error) {

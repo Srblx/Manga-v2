@@ -1,18 +1,17 @@
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, Stack, TextField, styled } from "@mui/material";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { debounceTime, distinctUntilChanged, fromEvent, map } from "rxjs";
-import { MangaModelData } from "../interfaces/MangaModel.interface";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import ScrollToTopButton from "../components/BtnScrollTop.component";
 import { MangaCard } from "../components/CardManga.component";
-import SearchIcon from "@mui/icons-material/Search";
-import { TextField, Box, Stack, styled } from "@mui/material";
 import { ErrorDisplayManga } from "../components/ErrorDisplayMangaList.component";
 import { LoadingDisplayManga } from "../components/LoadingDisplayManga.component";
-import ScrollToTopButton from "../components/BtnScrollTop.component";
-import axios from "axios";
 import UserContext from "../context/UserContext";
+import { MangaModelData } from "../interfaces/MangaModel.interface";
 import { URL_BASE_MANGA_SAFE } from "../utils/routeApi.utils";
-
 
 const StyledStackForAllCardManga = styled(Stack)({
   justifyContent: "center",
@@ -70,7 +69,6 @@ export function ListManga() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { user } = useContext(UserContext);
 
-
   useEffect(() => {
     const inputElement = inputRef.current;
     if (inputElement) {
@@ -90,7 +88,6 @@ export function ListManga() {
       };
     }
   }, []);
-
 
   const fetchManga = async (
     { pageParam }: { pageParam: number },
@@ -159,7 +156,9 @@ export function ListManga() {
   return (
     <>
       <Styledh1ForListManga>
-        <span style={{ color: "rgb(68, 68, 68)" }}>Welcom {user?.firstname}</span>
+        <span style={{ color: "rgb(68, 68, 68)" }}>
+          Welcom {user?.firstname}
+        </span>
         <br />
         TO THE MANGA LIBRARY
       </Styledh1ForListManga>

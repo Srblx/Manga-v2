@@ -1,24 +1,24 @@
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IconButton, Stack, styled } from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../context/UserContext";
 import {
   AddNewsForm,
   LikesModel,
   NewsModel,
 } from "../interfaces/NewsModel.interface";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-// import { format } from "date-fns";
-import { useContext, useEffect, useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import UserContext from "../context/UserContext";
 import ApiAxios from "../utils/axios.api";
-import { AlertAuthorizeDeleteNews } from "./UnderComponents/BoxAlertMessage.component";
 import { ADMIN } from "../utils/constant.utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { LoadingDisplayManga } from "./LoadingDisplayManga.component";
-import { ErrorDisplayManga } from "./ErrorDisplayMangaList.component";
 import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
-import UpdateNewsModal from "./UnderComponents/ModalEditNews.component";
+import { ErrorDisplayManga } from "./ErrorDisplayMangaList.component";
+import { LoadingDisplayManga } from "./LoadingDisplayManga.component";
+import { AlertAuthorizeDeleteNews } from "./Shared/BoxAlertMessage.component";
+import UpdateNewsModal from "./Shared/ModalEditNews.component";
 
 const StyledDivContentOneItem = styled("div")({
   background: "white",
@@ -52,15 +52,13 @@ type NewsItemProps = {
 
 export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
   const { user } = useContext(UserContext);
-
   const [allLikesForOneNews, setAllLikesForOneNews] = useState<number>(
     likes.length
   );
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [isAdmin] = useState(user?.role === ADMIN);
+  const [isAdmin, setIsAdmin] = useState(user?.role === ADMIN);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [formData, setFormData] = useState<AddNewsForm>({});
-
   const {
     data: newsData,
     refetch: refetchNews,
@@ -89,6 +87,13 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
   const [likeByMe, setLikeByMe] = useState<LikesModel | undefined>(
     likeData?.find((like) => like.user.id === user?.id)
   );
+  
+  const [newsLikeByUser, setNewsLikeByUser] = useState<NewsModel[]>([]);
+  useEffect(() => {
+    const userLikes = likeData?.filter((like) => like.user.id === user?.id);
+    const newsLikedByUserTemp = userLikes?.map((like) => like.news);
+    setNewsLikeByUser(newsLikedByUserTemp || []);
+  }, [likeData, user?.id]);
 
   const { mutate: createLikeMutation } = useMutation({
     mutationFn: async (option: { newsId: string; userId: string }) => {
@@ -98,15 +103,14 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
       });
       return response.data;
     },
-    onSuccess: (data) => {
-      setLikeByMe(data);
+    onSuccess: () => {
+      setLikeByMe(true);
       setAllLikesForOneNews((prev) => prev + 1);
     },
     onError: (error) => {
       console.error("Error creating like:", error);
     },
   });
-
   const { mutate: deleteLikeMutation } = useMutation({
     mutationFn: async (likeId: string) => {
       await ApiAxios.delete(`${ApiRoutes.LIKES_ + likeId}`);
@@ -170,13 +174,19 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
 
   const handleOpenEditModal = async () => {
     const response = await ApiAxios.get(ApiRoutes.NEWS + newsModel.id);
-    setFormData(response.data);
+    const updateData = {
+      title: response.data.title,
+      content: response.data.content,
+      imageUrl: response.data.imageUrl,
+    };
+    setFormData(updateData);
     setOpenEditModal(true);
   };
 
   const handleCloseEditModal = () => {
     setOpenEditModal(false);
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -210,6 +220,7 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
 
   const handleSubmitUpdate = async () => {
     updateNewsMutation({ newsId: newsModel.id, formData });
+    setOpenEditModal(false);
   };
 
   if (isPending) return <LoadingDisplayManga />;
@@ -246,7 +257,7 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <p>
           <strong style={{ color: "blue" }}>
-            {/* format */(new Date(newsModel.createdAt), "dd/MM/yyyy")}
+            {format(new Date(newsModel.createdAt), "dd/MM/yyyy")}
           </strong>
         </p>
         <p>

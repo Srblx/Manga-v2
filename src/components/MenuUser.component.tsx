@@ -1,16 +1,16 @@
-import * as React from "react";
+import styled from "@emotion/styled";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "@emotion/styled";
 import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Pages } from "../utils/route.utils";
+import * as React from "react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Pages } from "../utils/route.utils";
 
 const StyledMenuItem = styled(MenuItem)({
   fontSize: "1.5rem",
@@ -27,9 +27,7 @@ export default function PositionedMenu({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-
   const open = Boolean(anchorEl);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };

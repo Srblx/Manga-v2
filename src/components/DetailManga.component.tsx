@@ -1,8 +1,11 @@
-import { Stack } from "@mui/material";
-import { SingleMangaModelData, MangaAuthorModel } from "../interfaces/MangaModel.interface";
-import { Link } from "react-router-dom";
-import React from "react";
 import styled from "@emotion/styled";
+import { Stack } from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  MangaAuthorModel,
+  SingleMangaModelData,
+} from "../interfaces/MangaModel.interface";
 import { Pages } from "../utils/route.utils";
 
 const StyledStackForTitle = styled(Stack)({
@@ -88,33 +91,35 @@ const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
           </Stack>
         </StyledDivRightColumn>
         <StyledDivLeftColumn>
-          <div style={{border: "solid 5px black", marginBottom: "2rem"}}></div>
+          <div
+            style={{ border: "solid 5px black", marginBottom: "2rem" }}
+          ></div>
           <div style={{ paddingTop: ".4rem" }}>
             Authors :
-            {manga.authors.map((author: MangaAuthorModel, index: number) => (
-              <ul key={index}>
-                <li>{author.name}</li>
-              </ul>
-            ))}
+            <ul>
+              {manga.authors.map((author: MangaAuthorModel, index: number) => (
+                <li key={index}>{author.name}</li>
+              ))}
+            </ul>
           </div>
           {manga.genres && manga.genres.length > 0 && (
             <div>
               Type :{" "}
-              {manga.genres.map((g, index) => (
-                <ul key={index}>
-                  <li> {g.name}</li>
-                </ul>
-              ))}
+              <ul>
+                {manga.genres.map((g, index) => (
+                  <li key={index}> {g.name}</li>
+                ))}
+              </ul>
             </div>
           )}
           {manga.themes && manga.themes.length > 0 && (
             <div>
               Topics :{" "}
-              {manga.themes.map((t, index) => (
-                <ul key={index}>
-                  <li> {t.name}</li>
-                </ul>
-              ))}
+              <ul>
+                {manga.themes.map((t, index) => (
+                  <li key={index}> {t.name}</li>
+                ))}
+              </ul>
             </div>
           )}
           <br />

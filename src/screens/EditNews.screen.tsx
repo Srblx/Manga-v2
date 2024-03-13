@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { TextFieldUpdateNews } from "../components/UnderComponents/InputCustom.component";
-import { AddNewsForm } from "../interfaces/NewsModel.interface";
 import { Stack } from "@mui/material";
-import { ButtonCustom } from "../components/UnderComponents/BtnCustom.component";
-import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { ButtonCustom } from "../components/Shared/BtnCustom.component";
+import { TextFieldUpdateNews } from "../components/Shared/InputCustom.component";
+import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
+import { AddNewsForm } from "../interfaces/NewsModel.interface";
 
 export function EditNews() {
   const [formData, setFormData] = useState<AddNewsForm>({});

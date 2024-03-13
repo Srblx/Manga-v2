@@ -1,10 +1,14 @@
-import { LikesModel, NewsModel } from "../interfaces/NewsModel.interface";
-import { CardNews } from "../components/CardNews.component";
 import styled from "@emotion/styled";
-import { Stack } from "@mui/material";
-import ApiAxios from "../utils/axios.api";
-import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Button, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import { useContext, useEffect, useState } from "react";
+import { CardNews } from "../components/CardNews.component";
+import LikedNewsModal from "../components/Shared/ModalLikedByUser.component";
+import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
+import UserContext from "../context/UserContext";
+import { LikesModel, NewsModel } from "../interfaces/NewsModel.interface";
+import ApiAxios from "../utils/axios.api";
 import { ApiRoutes } from "../utils/routeApi.utils";
 
 const StyledStackContentItem = styled(Stack)({
@@ -14,7 +18,27 @@ const StyledStackContentItem = styled(Stack)({
   background: "#ffffffb5",
 });
 
+const StyledStackContentMyAllFavorite = styled(Stack)({
+  background: "#ffffffb5",
+  paddingTop: ".5rem",
+  justifyContent: "end",
+  alignItems: "end",
+});
+
+const StyledButtonMyAllFavorite = styled(Button)({
+  marginRight: ".5rem",
+  background: "black",
+  color: "#FF0001",
+  "&:hover": {
+    background: "#FF0001",
+    color: "black",
+  },
+});
+
 export function ShowNews() {
+  const [openModalLikedByMe, setOpenModalLikedByMe] = useState(false);
+  const user = useContext(UserContext);
+
   const { data: newsData } = useQuery<NewsModel[]>({
     queryKey: ["news"],
     queryFn: async () => {
@@ -31,24 +55,54 @@ export function ShowNews() {
     },
   });
 
+  const handleOpenModalLikedByMe = () => {
+    setOpenModalLikedByMe(true);
+  };
+
+  const handleCloseModalLikedByMe = () => {
+    setOpenModalLikedByMe(false);
+  };
+
+  const [likedNews, setLikedNews] = useState<NewsModel[]>([]);
+
+  useEffect(() => {
+    const userLikes = allLikes?.filter(
+      (like) => like.user.id === user?.user?.id
+    );
+    const newsLikedByUserTemp = userLikes?.map((like) => like.news);
+    setLikedNews(newsLikedByUserTemp || []);
+  }, [allLikes, user?.user?.id]);
+
   return (
     <>
       <StyledH1>News </StyledH1>
-      {
-        <StyledStackContentItem
-          direction="row"
-          flexWrap="wrap"
-          sx={{ background: "red" }}
+      <StyledStackContentMyAllFavorite>
+        <StyledButtonMyAllFavorite
+          variant="contained"
+          onClick={handleOpenModalLikedByMe}
         >
-          {newsData?.map((newsModel) => (
-            <CardNews
-              key={newsModel.id}
-              newsModel={newsModel}
-              likes={allLikes?.filter((like) => like.news.id === newsModel.id)}
-            />
-          ))}
-        </StyledStackContentItem>
-      }
+          My <FavoriteIcon />
+        </StyledButtonMyAllFavorite>
+      </StyledStackContentMyAllFavorite>
+      <StyledStackContentItem
+        direction="row"
+        flexWrap="wrap"
+        sx={{ background: "red" }}
+      >
+        {newsData?.map((newsModel) => (
+          <CardNews
+            key={newsModel.id}
+            newsModel={newsModel}
+            likes={allLikes?.filter((like) => like.news.id === newsModel.id)}
+          />
+        ))}
+      </StyledStackContentItem>
+      <LikedNewsModal
+        open={openModalLikedByMe}
+        handleClose={handleCloseModalLikedByMe}
+        user={user.user}
+        likedNews={likedNews}
+      />
     </>
   );
 }
