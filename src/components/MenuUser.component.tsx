@@ -83,7 +83,8 @@ export default function PositionedMenu({
         }}
         PaperProps={{
           style: {
-            zIndex: 1200,
+            zIndex: 9999,
+            marginTop: "3.5rem",
           },
         }}
       >
@@ -140,7 +141,7 @@ export default function PositionedMenu({
             textAlign: "center",
           }}
         >
-          <Typography variant="h6">
+          <Typography variant="h6" sx={{ color: "black" }}>
             <strong>Are you sure you want to logout?</strong>
             <br />
             If you log out you won't be able to add any more items to your cart

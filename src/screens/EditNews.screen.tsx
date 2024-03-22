@@ -10,8 +10,6 @@ export function EditNews() {
   const [formData, setFormData] = useState<AddNewsForm>({});
   const { newId } = useParams();
 
-  console.log("newsId : ", newId);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({

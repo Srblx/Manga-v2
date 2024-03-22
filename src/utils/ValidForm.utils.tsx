@@ -20,11 +20,11 @@ export const validateFormSingUp = (
     return false;
   }
   if (formData.lastname.length < 3) {
-    setError("Too short lastname");
+    setError("Too short lastname between 3 and 30 characters");
     return false;
   }
   if (formData.firstname.length < 3) {
-    setError("Too short firstname");
+    setError("Too short firstname between 3 and 30 characters");
     return false;
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.(com|fr)$/;
@@ -70,11 +70,17 @@ export const validateFormAddNews = (
   if (!formData.content || !formData.title || !formData.imageUrl) {
     setError("Please fill in all fields");
     return false;
+  } else if (formData.title.length < 3 || formData.content.length < 3) {
+    setError("The title and content must be at least 3 characters long");
+    return false;
   } else if (formData.title.length > 150 || formData.content.length > 800) {
     setError(
       "The title must not exceed 150 characters and the description must not exceed 800 characters."
     );
     return false;
-  }
+  } /* else if (!/^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(formData.imageUrl)) {
+    setError("The image URL must be a valid HTTP or HTTPS URL with a supported image extension (JPG, JPEG, PNG, GIF, or WEBP).");
+    return false;
+  } */
   return true;
 };

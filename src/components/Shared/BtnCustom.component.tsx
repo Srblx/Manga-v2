@@ -36,22 +36,22 @@ export function ButtonCustom(props: PropsCustom) {
     disabled,
   } = props;
 
-const ssx: Partial<SxProps> = {
-  background: background || "black",
-  fontFamily: "Youtube Sans",
-  boxShadow: boxShadow || undefined,
-  color: "#FFFFFF",
-  fontSize: "18px",
-  textTransform: "math-auto",
-  fontWeight: "400",
-  borderRadius: "15px",
-  padding: padding,
-  "&:hover": {
-    background: hoverBackground || "black",
+  const ssx: Partial<SxProps> = {
+    background: background || "black",
+    fontFamily: "Youtube Sans",
+    boxShadow: boxShadow || undefined,
     color: "#FFFFFF",
-    boxShadow: hoverBoxShadow || undefined,
-  },
-}
+    fontSize: "18px",
+    textTransform: "math-auto",
+    fontWeight: "400",
+    borderRadius: "15px",
+    padding: padding,
+    "&:hover": {
+      background: hoverBackground || "black",
+      color: "#FFFFFF",
+      boxShadow: hoverBoxShadow || undefined,
+    },
+  };
   return (
     <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
       <Button

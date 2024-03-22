@@ -49,6 +49,7 @@ export function LoginForm() {
   const handleSuccess = (data: any) => {
     setError("");
     localStorage.setItem("accessToken", data.accessToken);
+    // console.log(data.accessToken);
     setUser(data.user);
     navigate(Pages.HOME);
   };
@@ -101,7 +102,7 @@ export function LoginForm() {
             direction="column"
             alignItems="start"
           >
-            <StyledH1TitleLoginForm onClick={handleLogin}>
+            <StyledH1TitleLoginForm onClick={handleLogin} id="fast_log">
               Login
             </StyledH1TitleLoginForm>
             <LabelCustom margin="2em 0 .1em 0">
@@ -147,8 +148,8 @@ export function LoginForm() {
             </div>
           )}
           <ButtonCustom
-            data-cy="login_button"
-            id="button-login"
+            data-testid="button-login"
+            id="btn_login"
             type="submit"
             background="#0B51E7"
             hoverBackground="#E8614D"

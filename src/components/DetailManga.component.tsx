@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Stack } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import {
   MangaAuthorModel,
@@ -27,7 +27,7 @@ const StyledStackContentAllDetail = styled(Stack)({
 const StyledDivRightColumn = styled("div")({
   flex: "1",
   textAlign: "center",
-  padding: ".5rem",
+  paddingRight: ".5rem",
   borderRight: "3px solid #d34040",
 });
 
@@ -46,6 +46,10 @@ const StyledCustomButton = styled("button")({
   marginTop: "1.5rem",
 });
 
+const StyledLi = styled("li")({
+  color: "black",
+});
+
 type SingleMangaItemProps = {
   manga: SingleMangaModelData;
 };
@@ -56,14 +60,18 @@ const BackHomeLink = React.memo(() => (
   </Link>
 ));
 
-const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
+const MangaCard = memo(({ manga }: SingleMangaItemProps) => {
+  console.log("manga : ", manga);
   return (
-    <>
+    <Stack sx={{ marginTop: "2rem" }}>
       <StyledStackForTitle>
         <h1>{manga.title}</h1>
       </StyledStackForTitle>
       <StyledStackContentAllDetail>
         <StyledDivRightColumn>
+          <div
+            style={{ border: "solid 5px black", marginBottom: ".3rem" }}
+          ></div>
           <Stack>
             <img
               src={manga.images.jpg.image_url}
@@ -74,31 +82,29 @@ const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
               }}
             />
             <br />
-            <li>Manga popularity : {manga.popularity}</li>
+            <StyledLi>Manga popularity : {manga.popularity}</StyledLi>
             <br />
-            <li>Manga status : {manga.status}</li>
+            <StyledLi>Manga status : {manga.status}</StyledLi>
             <br />
-            <li>Manga rank : {manga.rank}</li>
+            <StyledLi>Manga rank : {manga.rank}</StyledLi>
             <br />
-            <li>Manga score : {manga.scored}</li>
+            <StyledLi>Manga score : {manga.scored}</StyledLi>
             <br />
-            <li>Supporter community : {manga.members}</li>
+            <StyledLi>Supporter community : {manga.members}</StyledLi>
             <br />
-            <li>
+            <StyledLi>
               More details : <a href={manga.url}>{manga.url}</a>
-            </li>
+            </StyledLi>
             <BackHomeLink />
           </Stack>
         </StyledDivRightColumn>
         <StyledDivLeftColumn>
-          <div
-            style={{ border: "solid 5px black", marginBottom: "2rem" }}
-          ></div>
+          <div style={{ border: "solid 5px black" }}></div>
           <div style={{ paddingTop: ".4rem" }}>
             Authors :
             <ul>
               {manga.authors.map((author: MangaAuthorModel, index: number) => (
-                <li key={index}>{author.name}</li>
+                <StyledLi key={index}>{author.name}</StyledLi>
               ))}
             </ul>
           </div>
@@ -107,7 +113,7 @@ const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
               Type :{" "}
               <ul>
                 {manga.genres.map((g, index) => (
-                  <li key={index}> {g.name}</li>
+                  <StyledLi key={index}> {g.name}</StyledLi>
                 ))}
               </ul>
             </div>
@@ -117,13 +123,13 @@ const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
               Topics :{" "}
               <ul>
                 {manga.themes.map((t, index) => (
-                  <li key={index}> {t.name}</li>
+                  <StyledLi key={index}> {t.name}</StyledLi>
                 ))}
               </ul>
             </div>
           )}
           <br />
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", color: "black" , marginTop: "5rem"}}>
             {manga.synopsis && manga.synopsis.length > 0 && (
               <div>
                 <p>
@@ -146,7 +152,7 @@ const MangaCard = React.memo(({ manga }: SingleMangaItemProps) => {
           </div>
         </StyledDivLeftColumn>
       </StyledStackContentAllDetail>
-    </>
+    </Stack>
   );
 });
 

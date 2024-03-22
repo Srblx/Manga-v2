@@ -23,12 +23,14 @@ export function AlertAuthorizeDeleteNews({
           boxShadow: 24,
           p: 4,
           textAlign: "center",
+          color: "black",
         }}
       >
         <Typography variant="h6">
           <strong>Are you sure you want to delete this news?</strong>
         </Typography>
         <Button
+          id="validate_deletion"
           variant="contained"
           sx={{ background: "red", margin: ".8rem .5rem" }}
           onClick={() => {

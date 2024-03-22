@@ -26,7 +26,7 @@ const StyledDivContentMangaCard = styled("div")({
 });
 
 const Styledh1ForListManga = styled("h1")({
-  marginTop: "4.5rem",
+  marginTop: "7.5rem",
   color: "black",
   paddingTop: "1rem",
   background: "white",

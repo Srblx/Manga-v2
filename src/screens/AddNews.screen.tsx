@@ -119,6 +119,7 @@ export function FormAddNews() {
         <p style={{ color: "red" }}>{error}</p>
         <p style={{ color: "white" }}>{succes}</p>
         <ButtonCustom
+          id="register_new_news"
           background={"green"}
           padding={"1rem"}
           onClick={handleSubmit}

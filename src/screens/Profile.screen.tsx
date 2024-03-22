@@ -55,10 +55,16 @@ export function Profile() {
       <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
         <StyledImg src="src/assets/pfp-manga.jpeg" />
       </Stack>
-      <Stack sx={{ justifyContent: "center", alignItems: "center", margin: "0 6.5rem" }}>
+      <Stack
+        sx={{
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "0 6.5rem",
+        }}
+      >
         <StyledUl>
           <StyledLi>Firstname : {userLastname} </StyledLi> |
-          <StyledLi>Lastname : {userFirstname} </StyledLi> | 
+          <StyledLi>Lastname : {userFirstname} </StyledLi> |
           <StyledLi>Email : {userEmail} </StyledLi> |
           <StyledLi>Role : {userRole}</StyledLi>
         </StyledUl>

@@ -4,7 +4,7 @@ import { Button, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { CardNews } from "../components/CardNews.component";
-import LikedNewsModal from "../components/Shared/ModalLikedByUser.component";
+import LikedNewsModal from "../components/ModalLikedByUser.component";
 import { StyledH1 } from "../components/StyledBaliseMui/H1.styled";
 import UserContext from "../context/UserContext";
 import { LikesModel, NewsModel } from "../interfaces/NewsModel.interface";

@@ -93,7 +93,6 @@ export function MangaCard({
     event.stopPropagation();
     increaseCartQuantity(manga.mal_id);
   };
-
   return (
     <StyledMangaCard>
       <StyledMangaCardContent>

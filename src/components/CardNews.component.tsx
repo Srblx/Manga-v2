@@ -17,8 +17,8 @@ import { ADMIN } from "../utils/constant.utils";
 import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
 import { ErrorDisplayManga } from "./ErrorDisplayMangaList.component";
 import { LoadingDisplayManga } from "./LoadingDisplayManga.component";
+import UpdateNewsModal from "./ModalEditNews.component";
 import { AlertAuthorizeDeleteNews } from "./Shared/BoxAlertMessage.component";
-import UpdateNewsModal from "./Shared/ModalEditNews.component";
 
 const StyledDivContentOneItem = styled("div")({
   background: "white",
@@ -29,6 +29,7 @@ const StyledDivContentOneItem = styled("div")({
   textAlign: "center",
   width: "40%",
   height: "100%",
+  color: "black",
 });
 
 const StyledImgNews = styled("img")({
@@ -87,7 +88,7 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
   const [likeByMe, setLikeByMe] = useState<LikesModel | undefined>(
     likeData?.find((like) => like.user.id === user?.id)
   );
-  
+
   const [newsLikeByUser, setNewsLikeByUser] = useState<NewsModel[]>([]);
   useEffect(() => {
     const userLikes = likeData?.filter((like) => like.user.id === user?.id);
@@ -222,24 +223,35 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
     updateNewsMutation({ newsId: newsModel.id, formData });
     setOpenEditModal(false);
   };
-
   if (isPending) return <LoadingDisplayManga />;
   if (isError) return <ErrorDisplayManga error={error.message} />;
   return (
     <StyledDivContentOneItem>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <IconButton onClick={handleOpenEditModal}>
+        <IconButton
+          onClick={handleOpenEditModal}
+          data-testid={`update-news-${newsModel.id}`}
+          data-news-update-id={newsModel.id}
+        >
           <EditIcon sx={{ color: "blue" }} />
         </IconButton>
         {isAdmin && (
-          <IconButton onClick={handleOpenDeleteModal}>
+          <IconButton
+            onClick={handleOpenDeleteModal}
+            data-testid={`delete-news-${newsModel.id}`}
+            data-news-id={newsModel.id}
+          >
             <DeleteForeverIcon sx={{ color: "red" }} />
           </IconButton>
         )}
       </Stack>
       <StyledImgNews src={currentNews?.imageUrl} alt="news" />
       <Stack direction="row" alignItems="center" justifyContent="center">
-        <IconButton onClick={onClickForLike}>
+        <IconButton
+          onClick={onClickForLike}
+          data-testid={`like-news-${newsModel.id}`}
+          data-news-like-id={newsModel.id}
+        >
           {likeByMe ? (
             <FavoriteIcon sx={{ color: "red" }} />
           ) : (

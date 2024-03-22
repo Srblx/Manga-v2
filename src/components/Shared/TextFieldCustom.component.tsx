@@ -18,11 +18,21 @@ interface CustomProps {
   fontFamily?: string;
   label?: string;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  disabled?: boolean;
 }
 
 export default function TextFieldCustom(props: CustomProps) {
-  const { id, value, name, variant, placeholder, color, fontFamily, onChange } =
-    props;
+  const {
+    id,
+    value,
+    name,
+    variant,
+    placeholder,
+    color,
+    fontFamily,
+    onChange,
+    disabled,
+  } = props;
   return (
     <TextField
       id={id}
@@ -32,6 +42,7 @@ export default function TextFieldCustom(props: CustomProps) {
       onChange={onChange}
       variant={variant}
       placeholder={placeholder}
+      disabled={disabled}
       sx={{
         width: "100%",
         background: "#F3F3F3",
