@@ -28,8 +28,9 @@ const LikedNewsModal = ({
   open,
   handleClose,
   likedNews,
-  user,
+  user, // pas besoin de cette props, préférer utiliser  const user = useContext(UserContext);
 }: LikedNewsModalProps) => {
+  
   return (
     <Modal
       open={open}

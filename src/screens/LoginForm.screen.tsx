@@ -21,7 +21,7 @@ import {
 import UserContext from "../context/UserContext";
 import { FormLoginData } from "../interfaces/LoginSignUp.interface";
 import { validateFormLogin } from "../utils/ValidForm.utils";
-import { PASSWORD, USER } from "../utils/privateConstant.utils";
+// import { PASSWORD, USER } from "../utils/privateConstant.utils";
 import { Pages } from "../utils/route.utils";
 import { ApiRoutes, URL_BASE_NEST_SKELETON } from "../utils/routeApi.utils";
 
@@ -89,8 +89,8 @@ export function LoginForm() {
   };
 
   const handleLogin = () => {
-    const defaultFormData = { email: USER, password: PASSWORD };
-    loginUser(defaultFormData);
+    // const defaultFormData = { email: USER, password: PASSWORD };
+    // loginUser(defaultFormData);
   };
 
   return (

@@ -41,8 +41,8 @@ export function Profile() {
     const user = localStorage.getItem("user");
     if (user) {
       const userName = JSON.parse(user);
-      const { firstname, lastname, role, email } = userName;
-      setUserFirstname(`${firstname}`);
+      const { firstname, lastname, role, email } = userName; // userName devient user
+      setUserFirstname(`${firstname}`); // un seul state userState suffit et du coup dans les StyledLi, on mettra userState.firstname, userState.lastname, etc...
       setUserLastname(`${lastname} `);
       setUserRole(`${role}`);
       setUserEmail(`${email}`);
