@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ButtonCustom } from "../components/Shared/BtnCustom.component";
@@ -73,8 +73,11 @@ export function SignUpForm() {
           }
         );
         return response.data;
-      } catch (error: any) {
-        throw new Error("Registration error: " + error.message);
+      } catch (error) {
+        if (axios.isAxiosError(error)) { // pour eviter le any 
+          throw new Error("Registration error: " + error.message);
+        }
+        throw new Error("Registration error");
       }
     },
     onError: handleError,

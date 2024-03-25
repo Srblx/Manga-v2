@@ -57,7 +57,7 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
     likes.length
   );
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(user?.role === ADMIN);
+  const [isAdmin, setIsAdmin] = useState(user?.role === ADMIN); // si pas d'utilisation du setIsAdmin, on peut directement declarer une const isAdmin = user?.role === ADMIN, et si c'est une operation un peut plus demandante comme une array find, c'est la bonne occasion d'utiliser useMemo (Pas le cas ici, mais c'est bon à savoir)
   const [openEditModal, setOpenEditModal] = useState(false);
   const [formData, setFormData] = useState<AddNewsForm>({});
   const {
@@ -74,9 +74,9 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
     },
     gcTime: 5000,
   });
-  const currentNews = newsData?.find((news) => news.id === newsModel.id);
+  const currentNews = newsData?.find((news) => news.id === newsModel.id); // currentNews deja present dans les props, pas besoin de l'avoir ici
 
-  const { data: likeData } = useQuery<LikesModel[]>({
+  const { data: likeData, /* refetch: refetchLikes */ } = useQuery<LikesModel[]>({
     queryKey: ["likes"],
     queryFn: async () => {
       const response = await ApiAxios.get(ApiRoutes.LIKES);
@@ -84,16 +84,17 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
     },
     gcTime: 5000,
   });
+  
 
   const [likeByMe, setLikeByMe] = useState<LikesModel | undefined>(
     likeData?.find((like) => like.user.id === user?.id)
   );
 
-  const [newsLikeByUser, setNewsLikeByUser] = useState<NewsModel[]>([]);
+  const [newsLikeByUser, setNewsLikeByUser] = useState<NewsModel[]>([]); // pas utilisé
   useEffect(() => {
     const userLikes = likeData?.filter((like) => like.user.id === user?.id);
     const newsLikedByUserTemp = userLikes?.map((like) => like.news);
-    setNewsLikeByUser(newsLikedByUserTemp || []);
+    setNewsLikeByUser(newsLikedByUserTemp || []); // newsLikeByUser pas utilisé 
   }, [likeData, user?.id]);
 
   const { mutate: createLikeMutation } = useMutation({
@@ -104,8 +105,10 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
       });
       return response.data;
     },
-    onSuccess: () => {
-      setLikeByMe(true);
+    onSuccess: (_data, variables) => {
+      console.log('variables : ', variables);
+      // refetch likeData
+      setLikeByMe(true); // declarer plutot une const avec un useMemo pour garder a jour cette variable plutot qu'un state, du coup plus besoin de set ici
       setAllLikesForOneNews((prev) => prev + 1);
     },
     onError: (error) => {
@@ -118,7 +121,8 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
       return likeId;
     },
     onSuccess: () => {
-      setLikeByMe(undefined);
+      // refetch likeData
+      setLikeByMe(undefined);  // declarer plutot une const avec un useMemo pour garder a jour cette variable plutot qu'un state, du coup plus besoin de set ici
       setAllLikesForOneNews((prev) => prev - 1);
     },
     onError: (error) => {
@@ -132,7 +136,7 @@ export function CardNews({ newsModel, likes = [] }: Readonly<NewsItemProps>) {
       return response.data;
     },
     onSuccess: () => {
-      refetchNews();
+      refetchNews(); // faire venir ce refetch des props, comme ca pas besoin de get les news dans ce component
     },
     onError: () => {
       console.error("Error deleting news:", error);

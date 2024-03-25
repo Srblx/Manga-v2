@@ -39,7 +39,7 @@ export function ShowNews() {
   const [openModalLikedByMe, setOpenModalLikedByMe] = useState(false);
   const user = useContext(UserContext);
 
-  const { data: newsData } = useQuery<NewsModel[]>({
+  const { data: newsData } = useQuery<NewsModel[]>({ // refetchNews a metttre dans props de CardNews
     queryKey: ["news"],
     queryFn: async () => {
       const response = await ApiAxios.get(ApiRoutes.NEWS);

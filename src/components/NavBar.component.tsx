@@ -71,6 +71,32 @@ export default function NavBar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { user } = useContext(UserContext);
   const [isAdmin, setIsAdmin] = useState(false);
+
+    const {requestCount, isConnected} = useCounterRequestSocket();
+
+  // TRANSFORMER EN CUSTOM HOOK
+  // const [requestCount, setRequestCount] = useState(0);
+  // const [isConnected, setIsConnected] = useState(false);
+
+  // useEffect(() => {
+  //   const socket = io("ws://localhost:3000/");
+  //   socket.on("connect", () => {
+  //     setIsConnected(true);
+  //   });
+  //   socket.on("disconnect", () => {
+  //     setIsConnected(false);
+  //   });
+  //   socket.on("counterRequest", (requestData: number) => {
+  //     setRequestCount(requestData);
+  //   });
+  //   return () => {
+  //     socket.off("connect");
+  //     socket.off("counterRequest");
+  //     socket.off("disconnect");
+  //     socket.disconnect();
+  //   };
+  // }, []);
+
   const [requestCount, setRequestCount] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
 
